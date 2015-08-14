@@ -1,0 +1,147 @@
+<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <table width="100%">
+             <tr>
+                <td width="63%" align="left" style="color: rgb(238, 76, 140); font-size:xx-large; vertical-align:bottom;" >
+	             <b>ORDER INFORMATION</b>
+                 </td>                               
+                 <td width="57%" align="left">
+                  <b > Mã Báo Giá</b>  ${object.name}<br>
+                   <b > Ngày Báo Giá</b> ${object.date_order or '' }<br>
+                   <b> NV Bán Hàng</b> ${object.user_id.name or ''}<br>
+              </td>
+             </tr>
+     </table>
+<font size="2">
+<p>
+<hr  width="100%"></hr>
+<p>
+ <table width="100%" valign="top">
+             <tr>
+                <td width="50%"  style="vertical-align:top; " >
+                 <b><div  style=" color: rgb(238, 76, 140);" >THÔNG TIN GIAO HÀNG</div></b>
+                     <p>
+                     <table>
+                     <tr>
+                     <td width="28%"><b>Khách Hàng:</b></td>
+                     <td width="2%"></td>
+                     <td>${ object.partner_shipping_id.name or '' }</td>
+                     </tr>
+                     <tr>
+                     <td><b>Mã Khách Hàng:</b></td>
+                     <td width="2%"></td>
+                     <td>${ object.partner_shipping_id.customer_name_id or ''}</td>
+                     </tr>
+                     <tr>
+                     <td><b>Điện Thoại:</b></td>
+                     <td width="2%"></td>
+                     <td>${ object.partner_shipping_id.phone or '' }</td>
+                     </tr>
+                     <tr>
+                     <td><b>Email:</b></td>
+                      <td width="2%"></td>
+                     <td> ${ object.partner_shipping_id.email or '' }</td>
+                     </tr>
+                     <tr>
+                     <td  valign="top"><b>Địa Chỉ:</b></td>
+                     <td width="2%"></td>
+                     <td>${ object.partner_shipping_id and object.partner_shipping_id.street or ''} ${object.partner_shipping_id and object.partner_shipping_id.state_id.name or ''} ${object.partner_shipping_id and object.partner_shipping_id.country_id.name or ''}  </td>
+                     </tr>
+                     </table>
+                 </td>
+                <td width="50%" valign="top"  style="vertical-align:top;">
+                 <b><div  style=" color: rgb(238, 76, 140);" >THÔNG TIN THANH TOÁN</div></b>
+                     <p><table align ="top">
+                     <tr>
+                     <td width="24%"><b>Khách Hàng:</b></td>
+                     <td width="2%"></td>
+                     <td>${ object.partner_invoice_id.name or '' }</td>
+                     </tr>
+                     <tr>
+                     <td><b>Điện Thoại:</b></td>
+                     <td width="2%"></td>
+                     <td>${ object.partner_invoice_id.phone or '' }</td>
+                     </tr>
+                     <tr>
+                     <td><b>Email:</b></td>
+                      <td width="2%"></td>
+                     <td> ${ object.partner_invoice_id.email or '' }</td>
+                     </tr>
+                     <tr>
+                     <td  valign="top"><b>Địa Chỉ:</b></td>
+                     <td width="2%"></td>
+                     <td>${ object.partner_invoice_id and object.partner_invoice_id.street or ''} ${object.partner_invoice_id and object.partner_invoice_id.state_id.name or ''} ${object.partner_invoice_id and object.partner_invoice_id.country_id.name or ''}  </td>
+                     </tr>
+<tr>
+                     <td><b></b></td>
+                     <td width="2%"></td>
+                     <td></td>
+                     </tr>
+                     </table>
+                 </td>            
+              </tr></table><p>
+
+  <table width="100%">
+	<tr align="left" width="100%" height="36px" style="background-color: rgb(238, 76, 140) ; color: rgb(255, 255, 255); font-size: 12px">
+              <th width="7%" align ="center">Hình Ảnh</th>
+              <th width="20%" align ="center">Mã Sản Phẩm</th>
+	      <th width="30%"  align ="center">Mô Tả</th>
+	      <th width="8%" align ="center">SL</th>
+              <th width="15%" align ="center">Giảm Giá</th>
+	      <th width="20%" align ="center">Giá</th>
+              <th  style="background-color: rgb(255, 255, 255)" width="18%" ></th>
+	   </tr>
+ % for line in object.order_line:
+	  <tr align="center"  width="100%"  style= font-size: 8px">
+              <td  align ="center"><img width="64px" height="64px" src="data::image/png;base64,${line.product_id.image_medium}" /></td>
+              <td  align ="left" style="background-color: rgb(245, 245, 245) ;">${line.product_id.name}</td>
+	      <td  align ="left" style="background-color: rgb(245, 245, 245) ;">${line.name}</td>
+	      <td lign ="center" style="background-color: rgb(245, 245, 245) ;">${'{:.2f}'.format(line.product_uos and line.product_uos_qty or line.product_uom_qty)}</td>			  
+	      <td  style=" background-color: rgb(245, 245, 245) ; " align ="center">${'{:,}'.format(line.discount)} %</td>
+              <td  align ="right" style="background-color: rgb(245, 245, 245) ;">${'{:,.2f}'.format(line.price_unit)} ${object.pricelist_id.currency_id.symbol}</td>
+              <td ></td>
+	  </tr>		 
+	 % endfor
+       
+           <tr align="left" width="100%">
+             <td align ="left" colspan="3" rowspan="3" style=" font-size: 11px; vertical-align:middle;"><br> ${ object.note or '' }</td>
+              <td  height= "45px" align ="center" colspan="1" style="vertical-align:middle;"><div align = right style=" font-size: 13px;">Discount</div></td>
+                  <td " height= "45px" align ="center" style="background-color: rgb(245, 245, 245) ;vertical-align:middle;"><div align = right>${'{:,.2f}'.format(object.total_discount)} ${object.pricelist_id.currency_id.symbol} </div></td>
+              <td  align ="right" height= "45px"><div align = right></div></td>
+           </tr>
+           <tr align="left" width="100%">
+              <td  height= "40px" align ="center" colspan="1" style="vertical-align:middle;"><div align = right style=" font-size: 16px;"><b>Total</b></div></td>
+              <td height= "40px" align ="right" colspan="2" style="background-color: rgb(238, 76, 140) ; color: rgb(255, 255, 255);   font-size: 16px; vertical-align:middle"><b>${'{:,.2f}'.format(object.amount_total)} ${object.pricelist_id.currency_id.symbol}</b></td>
+           </tr>
+         <tr align="left" width="100%">
+              <td align ="center" colspan="1"></td>
+              <td align ="right" colspan="2"></td>
+           </tr>
+     </table> 
+
+</div>
+<div>
+<p>
+     <table>
+           <tr><td  align ="left"><img width="280px" height="100px" src="data::image/png;base64,${object.company_id.logo}" /></td></tr>
+           <tr><td  align="left"  style= "font-size: 12px"><b>59 Lê Lợi, Phường Bến Nghé</b></td></tr>
+           <tr><td  align="left"  style= "font-size: 12px"><b>Quận 1, Tp.Hồ Chí Minh</b></td></tr>
+     </table>
+
+
+
+     <table>
+           <tr><td width="10%"><img width="20px" height="20px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTumJgD7kTesHGxofvzXob2NhifuRt61YUK6CDXs-YBLozPXT4HyA" /></td><td width="90%"  align="left"  style= "font-size: 12px"><b>(08) 39 39 39 18</b></td></tr>
+           <tr><td td width="10%"></td><td  align="left"  style= "font-size: 12px"><b>(08) 39 39 39 19</b></td></tr>
+      </table>
+      <table>
+           <tr><td  style="color: rgb(255,47, 151);font-size: 12px"  align="left"><b><a href="www.HungPhatUSA.com">www.HungPhatUSA.com</a></b></td></tr>
+           <tr><td  align="left"  style= "font-size: 12px"><b>Có hơn 100,000 viên kim cương cho Quý khách chọn! </b></td></tr>
+           <tr><td  style="color: rgb(255,47, 151);font-size: 12px"   align="left"><b>Thế Giới Hột Xoàn Của Bạn!</b></td></tr>
+           <tr><td  style="color: rgb(193, 193, 193);font-size: 12px"   align="left">Find us on Facebook and YouTube</td></tr>
+      </table>
+      <table  width="100%">
+           <tr><td width="2%"><img width="20px" height="20px" src="http://4.bp.blogspot.com/-PYoWTlthcQM/Ugu3gD72CQI/AAAAAAAAH6Q/MSEoqeldZV4/s1600/facebook+icon.ico" /></td><td style="color: rgb(0, 0, 255);font-size: 12px"   align="left" width="90%"><b><a href="www.facebook.com/HungPhatUSADiamonds">www.facebook.com/HungPhatUSADiamonds</a></b></td></tr>
+           <tr><td width="2%"><img width="20px" height="20px" src="http://msimage.nexoneu.com/en/new_main/icon_youtube.gif" /></td><td style="color: rgb(0, 0, 255);font-size: 12px"   align="left" width="90%"><b><a href="www.youtube.com/user/HungPhatUSA">www.youtube.com/user/HungPhatUSA</a></b></td></tr>
+     </table>
+</font>
+</div>        

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>	
+        
+       <record model="ir.ui.view" id="hp_view_repair_order_form">
+            <field name="name">hp.mrp.repair.form</field>
+            <field name="model">mrp.repair</field>
+            <field name="inherit_id" ref="mrp_repair.view_repair_order_form" />
+            <field name="arch" type="xml">	
+            	<field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done" position="replace">
+            		<field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done,send_manager,approve"/>
+            	</field>
+            	<button name="cancel" states="draft" string="Cancel Repair" position="after">
+            		<button name="send_manager" states="done" type="object" class="oe_highlight" string="Send to Manager"/>
+            		<button name="action_approve" states="send_manager" class="oe_highlight" type="object" string="Approve"/>
+            	</button>
+            	<field name="prodlot_id" on_change="onchange_lot_id(prodlot_id,product_id)" groups="stock.group_production_lot" string="Serial Number" position="after">
+            		<field name="receipt_size"/>
+            		<field name="new_size"/>
+            		<field name="receipt_weight"/>
+            		<field name="finish_weight"/>
+            	</field>
+            	<xpath expr="/form/sheet/notebook/page/field/tree/field[@name='product_uom']" position="after">
+            		<field name="weight_mo"/>
+            		<field name="weight_mo_unit"/>
+            	</xpath>
+            	 <field name="guarantee_limit" position="before">
+            		<field name="date"/>
+            	 	<field name="employee_id"/>
+            	 </field>
+            </field>
+      </record>
+        
+	</data>
+</openerp>

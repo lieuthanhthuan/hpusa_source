@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		 <record id="hpusa_sale_order_delivery_inheritance" model="ir.ui.view">
+            <field name="name">sale.order.delivery.date</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="hpusa_manufacturing.hpusa_sale_order"/>
+            <field name="arch" type="xml">
+                <field name="date_order" colspan="4" position="after">
+                    <field name="date_of_delivery"/>
+                </field>
+            </field>
+        </record>
+
+         <record id="hpusa_sale_view_order_form" model="ir.ui.view">
+         <field name="name">hpusa.sale.order.done.form</field>
+         <field name="model">sale.order</field>
+	     <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+            <xpath expr="/form/header/button[@name='cancel']" position="before">
+            	<button name="action_done" states="progress,manual" string="Done" groups="base.group_user" type="object"/>
+			</xpath>
+         </field>
+         </record>
+	</data>
+</openerp>

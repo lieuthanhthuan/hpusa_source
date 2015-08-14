@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="0">
+    <record id="group_agent_cooperate" model="res.groups">
+        <field name="name">Agent - Cooperate</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_sale_salesman_all_leads'))]"/>
+    </record>    
+</data>
+</openerp>

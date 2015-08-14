@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+                
+      <report id="stock_picking_detail" string="Stock Picking Detail" model="wizard.hpusa.product.list.report" name="stock_picking_detail" rml="hpusa_manufacturing/report/stock_picking_detail.ods" menu ="False" header="False"/>  
+      <record model="ir.actions.report.xml" id="stock_picking_detail">
+        	<field name="report_type">oo-xls</field>
+      </record>  
+      
+      <report id="manufacturing_detail" string="Manufacturing Detail" model="wizard.hpusa.report" name="manufacturing_detail" rml="hpusa_manufacturing/report/mo_detail.ods" menu ="False" header="False"/>  
+      <record model="ir.actions.report.xml" id="manufacturing_detail">
+        	<field name="report_type">oo-xls</field>
+      </record>  
+      
+      <report id="manufacturing_v_invoice" string="V-Invoice" model="wizard.hpusa.report" name="manufacturing_v_invoice" rml="hpusa_manufacturing/report/v_invoice.ods" menu ="False" header="False"/>  
+      <record model="ir.actions.report.xml" id="manufacturing_v_invoice">
+        	<field name="report_type">oo-xls</field>
+      </record> 
+      
+      
+      <report id="material_repair_summay" string="Material Repair Summary" model="wizard.hpusa.report" name="material_repair_summay" rml="hpusa_manufacturing/report/material_repair_summay.ods" menu ="False" header="False"/>  
+      <record model="ir.actions.report.xml" id="material_repair_summay">
+        	<field name="report_type">oo-xls</field>
+      </record>
+      
+      <report id="stock_in_out" string="Stock In Out" model="wizard.hpusa.report" name="stock_in_out" rml="hpusa_manufacturing/report/stock_in_out.ods" menu ="False" header="False"/>  
+      <record model="ir.actions.report.xml" id="stock_in_out">
+        	<field name="report_type">oo-xls</field>
+      </record>            
+      
+      <!--hpusa 08-07-2015 -->
+      <report id="stock_in_out_diamond" string="Stock In Out Diamond" model="wizard.hpusa.report" name="stock_in_out_diamond" rml="hpusa_manufacturing/report/stock_in_out_diamond.ods" menu ="False" header="False"/>  
+      <record model="ir.actions.report.xml" id="stock_in_out_diamond">
+        	<field name="report_type">oo-xls</field>
+      </record> 
+                   
+    </data>
+</openerp>

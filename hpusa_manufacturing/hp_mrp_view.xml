@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+       <record model="ir.ui.view" id="hp_mrp_production_workcenter_form_view_inherit">
+            <field name="name">hp.mrp.production.workcenter.line.form</field>
+            <field name="model">mrp.production.workcenter.line</field>
+            <field name="inherit_id" ref="mrp_operations.mrp_production_workcenter_form_view_inherit" />
+            <field name="arch" type="xml">
+            	<button name="button_start_working" string="Start" states="draft" class="oe_highlight" position="after">
+            		<button name="button_send_manager" string="Send to Manager" states="startworking" class="oe_highlight"/>
+            		<button name="send_mail" string="Send by Email" type="object" class="oe_highlight"/>
+            	</button>
+            	<field name="state" widget="statusbar" statusbar_visible="draft,startworking" position="replace">
+            		<field name="state" widget="statusbar" statusbar_visible="draft,startworking,waiting_director,done"/>
+            	</field>
+            	<button name="button_done" string="Finished" states="startworking" class="oe_highlight" position="replace">
+            		<button name="button_approve" string="Approve" states="waiting_director"  class="oe_highlight"/>
+            		<button name="button_refuse" string="Refuse"  states="waiting_director"  class="oe_highlight"/>
+            		<button name="button_cancel2" string="Cancel" states="done"/>
+            	</button>
+
+
+            	<field name="sequence" position="after">
+            		<field name="employee_id"/>
+                     <!--field name="groups_id_many" widget="many2many_tags"/-->
+            	</field>
+            	<group string="Product to Produce" position="replace">
+            		<group string="Product to Produce" col="8">
+            			<group colspan="2">
+            				<field name="image_medium" widget="image" class="oe_avatar oe_left" nolabel="1"/>
+            			</group>
+            			<group colspan="6">
+                        	<field name="product"/>
+                            <field name="qty"/>
+                            <field name="weight"/>
+                            <field name="uom" widget="selection"/>
+                            <field name="amount"/>
+                         </group>
+            		</group>
+            	</group>
+            	<page position="after">
+					 <page string="Internotes Move">
+		                 	<group string="Delivery">
+		                 		<field name="delivery" nolabel="1"/>
+		                 	</group>
+		                 	<group string="Return">
+		                 		<field name="return_" nolabel="1"/>
+		                 	</group>
+		                 	<group string="Lost">
+		                 		<field name="lost" nolabel="1"/>
+		                 	</group>
+		             </page>
+            	</page>
+            </field>
+      </record>
+
+     <record id="hp_view_mrp_production_workcenter_form_view_filter" model="ir.ui.view">
+        <field name="name">hp.mrp.production.workcenter.line.select</field>
+        <field name="model">mrp.production.workcenter.line</field>
+        <field name="inherit_id" ref="mrp_operations.view_mrp_production_workcenter_form_view_filter"/>
+        <field name="arch" type="xml">
+        	<field name="name" string="Work Orders" position="after">
+        		<field name="so_id" string="Sale Order"/>
+        	</field>
+        	 <filter string="Work Center" icon="terp-go-home" domain="[]" context="{'group_by':'workcenter_id'}" position="after">
+        	 	<filter name="group_sale" string="Sale Order" icon="terp-go-home" domain="[]" context="{'group_by':'so_id'}"/>
+        	 </filter>
+        </field>
+      </record>
+      <record model="ir.ui.view" id="hp_mrp_production_workcenter_tree_view_inherit">
+            <field name="name">hp.mrp.production.workcenter.line.tree</field>
+            <field name="model">mrp.production.workcenter.line</field>
+            <field name="inherit_id" ref="mrp_operations.mrp_production_workcenter_tree_view_inherit" />
+            <field name="arch" type="xml">
+            	<field name="production_id" position="after">
+            		<field name="so_id"/>
+            	</field>
+            </field>
+      </record>
+       <record model="ir.ui.view" id="hp_mrp_workcenter_view">
+            <field name="name">hp.mrp.workcenter.form</field>
+            <field name="model">mrp.workcenter</field>
+            <field name="inherit_id" ref="mrp.mrp_workcenter_view" />
+            <field name="arch" type="xml">
+            	<field name="active" position="after">
+            		<field name="mo_state"/>
+            	</field>
+            </field>
+      </record>
+
+
+       <record id="hp_mrp_mrp_bom_form_view" model="ir.ui.view">
+            <field name="name">mrp.bom.form</field>
+            <field name="model">mrp.bom</field>
+            <field name="inherit_id" ref="mrp.mrp_bom_form_view" />
+            <field name="arch" type="xml">
+            	 <field name="product_id" on_change="onchange_product_id(product_id, name, context)" context="{'default_supply_method':'produce'}" class="oe_inline" position="before">
+            		<field name="so_id"/>
+            	</field>
+            </field>
+       </record>
+
+       <record id="hp_view_mrp_bom_filter" model="ir.ui.view">
+            <field name="name">hp.mrp.bom.select</field>
+            <field name="model">mrp.bom</field>
+            <field name="inherit_id" ref="mrp.view_mrp_bom_filter" />
+            <field name="arch" type="xml">
+            	 <field name="product_id" position="before">
+            		<field name="so_id"/>
+            	</field>
+            </field>
+       </record>
+
+
+       <record id="hp_mrp_production_form_view" model="ir.ui.view">
+            <field name="name">hp.mrp.production.form</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view" />
+            <field name="arch" type="xml">
+            	<group position="replace">
+            		<group>
+                        <group col="8">
+                        	<group colspan="2">
+                           		 <field name="image_medium" widget="image" class="oe_avatar oe_left" nolabel="1"/>
+                            </group>
+                            <group colspan="6">
+	                            <field name="product_id" on_change="product_id_change(product_id)" domain="[('bom_ids','!=',False),('bom_ids.bom_id','=',False)]" class="oe_inline" context='{"default_supply_method":"produce", "default_type": "product"}'/>
+	                            <label for="product_qty"/>
+	                            <div>
+	                                <field name="product_qty" class="oe_inline"/>
+	                                <field name="product_uom" groups="product.group_uom" class="oe_inline"/>
+	                                <button type="action"
+	                                    icon="terp-accessories-archiver+"
+	                                    name="%(mrp.action_change_production_qty)d"
+	                                    string="(Update)" states="confirmed" class="oe_edit_only oe_link"/>
+	                            </div>
+	                            <label for="product_uos_qty" groups="product.group_uos"/>
+	                            <div groups="product.group_uos">
+	                                <field name="product_uos_qty" class="oe_inline"/>
+	                                <label string="-" attrs="{'invisible':[('product_uos','=',False)]}" class="oe_inline"/>
+	                                <field name="product_uos" class="oe_inline"/>
+	                            </div>
+	                            <field name="date_planned"/>
+	                          </group>
+                        </group>
+                        <group>
+                            <field name="bom_id" domain="[('product_id','=',product_id)]" context="{'default_product_id': product_id}" on_change="bom_id_change(bom_id)" required="1"/>
+                            <field name="routing_id" class="oe_inline" groups="mrp.group_mrp_routings"/>
+                            <field name="user_id"/>
+                            <field name="origin"/>
+                        </group>
+                        <group groups="stock.group_locations">
+                            <field name="location_src_id" domain="[('usage','=','internal')]" on_change="location_id_change(location_src_id,location_dest_id)"/>
+                            <field name="location_dest_id" domain="[('usage','=','internal')]"/>
+                        </group>
+                    </group>
+
+            	</group>
+            	 <field name="move_lines2" nolabel="1" position="replace">
+            	 	 <field name="move_lines2" nolabel="1">
+            	 	 	<tree colors="red:scrapped==True;green:returned==True;blue:state == 'draft';black:state in('picking_except','confirmed','ready','in_production');gray:state == 'cancel' " string="Consumed Products">
+                           <field name="product_id" readonly="1"/>
+                               <field name="product_qty" readonly="1"/>
+                               <field name="product_uom" readonly="1" string="Unit of Measure" groups="product.group_uom"/>
+                               <field name="prodlot_id" context="{'product_id': product_id}" groups="stock.group_production_lot"/>
+                               <field name="state" invisible="1"/>
+                               <field name="scrapped" invisible="1"/>
+                               <field name="returned" invisible="1"/>
+                           </tree>
+            	 	 </field>
+            	 </field>
+
+            	  <field name="move_lines" nolabel="1" options="{'reload_on_button': true}" position="replace">
+            	  			<field name="move_lines" options="{'reload_on_button': true}"  nolabel="1">
+                                        <tree colors="blue:state == 'draft';black:state in ('picking_except','confirmed','ready','in_production');gray:state in ('cancel','done') " string="Products to Consume">
+                                            <field name="product_id"/>
+                                            <field name="product_qty"  string="Quantity"/>
+                                            <field name="product_uom" string="Unit of Measure" groups="product.group_uom"/>
+                                            <field name="prodlot_id" groups="stock.group_production_lot" context="{'product_id': product_id}"/>
+                                            <field name="state" invisible="1"/>
+                                            <button name="%(stock.move_consume)d"
+                                                string="Consume Products" type="action"
+                                                icon="gtk-go-forward" context="{'consume': True}"
+                                                states="draft,waiting,confirmed,assigned"/>
+                                            <button
+                                                   name="%(stock.track_line)d"
+                                                   string="Split in Serial Numbers"
+                                                   type="action" icon="gtk-justify-fill"
+                                                   states="draft,waiting,confirmed,assigned"
+                                                   groups="stock.group_production_lot"/>
+                                            <button name="%(stock.move_scrap)d"
+                                                string="Scrap Products" type="action"
+                                                icon="terp-gtk-jump-to-ltr" context="{'scrap': True}"
+                                                states="draft,waiting,confirmed,assigned"/>
+                                            <button name="%(move_return)d"
+                                                string="Return Products" type="action"
+                                                icon="gtk-redo" context="{'scrap': True}"/>
+                                        </tree>
+                                    </field>
+            	  </field>
+            </field>
+       </record>
+
+       <record id="hp_view_mrp_production_filter" model="ir.ui.view">
+            <field name="name">hp.mrp.production.select</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
+            <field name="arch" type="xml">
+            	<field name="name" string="Production" filter_domain="['|',('name','ilike',self),('origin','ilike',self)]" position="after">
+            		<field name="so_id" string="Sale Order"/>
+            		<field name="company_id" string="Company"/>
+            	</field>
+            	<filter string="Product" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'product_id'}" position="after">
+            	 <filter string="Sale Order" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'so_id'}"/>
+            	 </filter>
+            </field>
+       </record>
+
+       <record id="hp_mrp_production_tree_view" model="ir.ui.view">
+            <field name="name">hp.mrp.production.tree</field>
+            <field name="model">mrp.production</field>
+
+            <field name="arch" type="xml">
+                    <field name="name" position="after">
+                    	 <field name="so_id"/>
+                    	 <field name="company_id" invisible="1"/>
+                    </field>
+
+            </field>
+        </record>
+
+        <record id="hp_view_mrp_product_produce_wizard" model="ir.ui.view">
+            <field name="name">MRP Product Produce</field>
+            <field name="model">mrp.product.produce</field>
+            <field name="inherit_id" ref="mrp.view_mrp_product_produce_wizard"/>
+            <field name="arch" type="xml">
+                <field name="product_qty" colspan="2" position="after">
+                	 <field name="weight_mo"/>
+                	 <field name="weight_mo_unit"/>
+                </field>
+            </field>
+        </record>
+
+
+	</data>
+</openerp>

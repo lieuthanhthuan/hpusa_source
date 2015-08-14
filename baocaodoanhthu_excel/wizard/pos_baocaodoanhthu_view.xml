@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_pos_baocaodoanhthu" model="ir.ui.view">
+            <field name="name">Bao cao doanh thu</field>
+            <field name="model">pos_baocaodoanhthu</field>
+            <field name="arch" type="xml">
+                <form version="7.0" string="Xuat bao cao">
+                    <field invisible="1" name="state"/>
+                    <field name="name" invisible="1"/>
+                    <group states="choose" string="Export">
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                    </group>
+                    <div states="get">
+                        <h2>Xuat thanh cong</h2>
+                        <p>Download: <field name="data" readonly="1" filename="name"/></p>
+                    </div>
+                    <footer states="choose">
+                        <button name="act_getfile" string="Export" type="object" class="oe_highlight"/> or
+                        <button special="cancel" string="Cancel" type="object" class="oe_link"/>
+                    </footer>
+                    <footer states="get">
+                        <button special="cancel" string="Close" type="object"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_pos_baocaodoanhthu" model="ir.actions.act_window">
+            <field name="name">Export</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">pos_baocaodoanhthu</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+  <menuitem action="action_pos_baocaodoanhthu" id="e" parent="hr.menu_hr_main" name="Salary Report" sequence="5" groups="base.group_hr_manager"  />
+    </data>
+</openerp>

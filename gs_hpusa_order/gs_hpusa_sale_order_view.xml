@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>	 
+ 	  
+   	
+   	 	<record id="gs_view_sales_order_filter" model="ir.ui.view">
+            <field name="name">gs.sale.order.list.select</field>
+            <field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+				<filter string="Status" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}" position="replace">
+	                 <filter string="Status" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'hp_state_1'}"/>
+	            </filter>            	     
+	     </field>
+   	</record>
+   	
+   	   
+	<record id="gs_view_quotation_tree" model="ir.ui.view">
+            <field name="name">gs.sale.order.tree</field>
+            <field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_quotation_tree"/>
+            <field name="arch" type="xml">
+			<field name="user_id" position="after" version="7.0">
+					<field name="hp_state_1" invisible="1"/>
+                     <field name="ownermanager_ids"/>
+                     <field name="involvestaff_ids"/>
+                     <field name="company_id"/> 
+            </field>            	     
+	     </field>
+   	</record>
+	<record id="gs_view_order_tree" model="ir.ui.view">
+            <field name="name">gs1.sale.order.tree</field>
+            <field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+			<field name="user_id" position="after" version="7.0">
+                     <field name="ownermanager_ids"/>
+                     <field name="involvestaff_ids"/>
+                     <field name="company_id"/> 
+                     <field name="hp_state_1" invisible="1"/>
+            </field>            	     
+	     </field>
+   	</record>
+	
+       <record id="gs_view_order_form" model="ir.ui.view">
+            <field name="name">gs.sale.order.form</field>
+            <field name="model">sale.order</field>
+	     <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                     <xpath expr="/form/header/button[@name='action_quotation_send']" position="after">                     
+                    		<button type="object" name="action_waiting_manager" states="draft,sent" string="Sent to Manager"/> 
+                            <button type="object" name="action_waiting_director" states="waiting_manager" string="Sent to Director" groups="gs_hpusa_order.group_view_bom_hpusa,gs_hpusa_order.group_view_bom_cost"/> 
+                            <button type="object" name="action_approve" states="waiting_director" string="Approve" groups="gs_hpusa_order.group_view_discount"/>
+                            <button type="object" name="action_refuse_director" states="approved,waiting_director" string="Director Refuse" groups="gs_hpusa_order.group_view_discount"/> 
+                            <button type="object" name="action_refuse_manager" states="waiting_manager" string="Manager Refuse" groups="gs_hpusa_order.group_view_bom_hpusa,gs_hpusa_order.group_view_bom_cost"/> 
+                            <button type="object" name="action_refuse_customer" states="sent" string="Customer Refuse"/> 
+                            <button type="action" name="%(action_gs_wizard_report_view)d" class="oe_highlight" string="View BOM Structure" groups="gs_hpusa_order.group_view_bom_hpusa"/>  
+				<button type="action" name="%(action_gs_wizard_report_view_cost)d" class="oe_highlight" string="View BOM Structure" groups="gs_hpusa_order.group_view_bom_cost"/>             
+			</xpath>
+                     <xpath expr="/form/header/button[@name='action_button_confirm']" position="replace">                     
+                    		<button name="action_button_confirm" states="draft" string="Confirm Sale" type="object" groups="base.group_user"/>               
+			</xpath>
+                     <xpath expr="/form/header/button[@name='action_quotation_send']" position="replace">                     
+                    		<button name="action_quotation_send" string="Send by Email" type="object" states="draft,approved" context="{'template':'1'}" class="oe_highlight" groups="base.group_user"/>              
+			</xpath> 
+                     <xpath expr="/form/header/button[@name='print_quotation']" position="replace">                     
+                    		<button name="print_quotation" string="Print" type="object" states="draft,approved" class="oe_highlight" groups="base.group_user"/>             
+			</xpath>                    
+                     <xpath expr="/form/header/button[@name='cancel']" position="replace">                     
+                    		<button name="cancel" states="draft,sent,waiting_manager,waiting_director,approved" string="Cancel" groups="base.group_user"/>
+			</xpath>                                   
+                     <xpath expr="/form/header/field[@name='state']" position="replace">                     
+                    		<field name="state" widget="statusbar" statusbar_visible="draft,waiting_manager,waiting_director,approved,sent,done" statusbar_colors='{"invoice_except":"red","waiting_date":"blue"}'/>           
+			</xpath>                     
+                    			
+                     <xpath expr="/form/sheet/group/group/field[@name='project_id']" position="replace">                     
+                            <field name = "project_id" invisible="1" />        
+			</xpath> 
+                     <field name="user_id" position="after" version="7.0">
+                           <field name="ownermanager_ids" widget="many2many_tags"/>
+                           <field name="involvestaff_ids" widget="many2many_tags"/> 
+                     </field>            	     
+ 
+                     <field name="order_line" position="after">
+				 	<group colspan="12" col="11">
+				 		<group colspan="8"/>
+				 		<field name="total_discount" widget='monetary' options="{'currency_field': 'currency_id'}"  colspan="3"/>
+				 		<group colspan="8"/>
+				 	</group>
+				 </field>               
+                <xpath expr="/form/sheet/notebook/page/field[@name='order_line']" position="replace">                            		
+				<field name="order_line">
+                                <form string="Sales Order Lines" version="7.0">
+                                    <header groups="base.group_user">
+                                        <button name="%(sale.action_view_sale_order_line_make_invoice)d" states="confirmed" string="Invoice" type="action" icon="terp-document-new"/>
+                                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done" statusbar_colors='{"exception":"red","cancel":"red"}'/>
+                                    </header>
+                                    <group>
+                                        <group>
+                                            <field name="state" invisible="1" />
+                                            <field name="check_" string="Select"/> 
+                                            <field name="product_id"
+                                                context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'shop':parent.shop_id, 'uom':product_uom}"
+                                                groups="base.group_user"
+                                                on_change="product_id_change(parent.pricelist_id, product_id, product_uom_qty, product_uom, product_uos_qty, product_uos, name, parent.partner_id, False, True, parent.date_order, False, parent.fiscal_position, False, context)"/>
+                                            <label for="product_uom_qty"/>
+                                            <div>
+                                                <field
+                                                    context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'shop':parent.shop_id, 'uom':product_uom}"
+                                                    name="product_uom_qty" class="oe_inline"
+                                                    on_change="product_id_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, False, parent.date_order, False, parent.fiscal_position, True, context)"/>
+                                                <field name="product_uom" groups="product.group_uom" class="oe_inline oe_no_button"
+
+                                                    on_change="product_uom_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, False, parent.date_order, context)"/>
+                                            </div>
+                                            <label for="product_uos_qty" groups="product.group_uos"/>
+                                            <div groups="product.group_uos">
+                                                <field name="product_uos_qty" class="oe_inline"/>
+                                                <field name="product_uos" options='{"no_open": True}' class="oe_inline"/>
+                                            </div>
+                                            <field name="price_unit"/>
+                                            <label for="discount" groups="gs_hpusa_order.group_view_discount"/>
+                                            <div name="discount" groups="gs_hpusa_order.group_view_discount">
+                                                <field name="discount" class="oe_inline" groups="gs_hpusa_order.group_view_discount" on_change="onchange_discount_percent(discount, price_unit, product_uos_qty, context)"/> %%
+                                            </div>
+                                            <field name="dicount_number" groups="gs_hpusa_order.group_view_discount" on_change="onchange_discount_number(dicount_number, price_unit, product_uos_qty, context)"/>
+                                        </group>
+                                        <group>
+                                            <field name="tax_id" widget="many2many_tags" domain="[('parent_id','=',False),('type_tax_use','&lt;&gt;','purchase')]"/>
+                                            <field name="type"/>
+                                            <field name="th_weight"/>
+                                            <!-- we should put a config wizard for these two fields -->
+                                            <field name="address_allotment_id"/>
+                                        </group>
+                                    </group>
+                                    <label for="name"/>
+                                    <field name="name"/>
+                                    <div groups="base.group_no_one">
+                                        <label for="invoice_lines"/>
+                                        <field name="invoice_lines"/>
+                                    </div>
+                                </form>
+                                <tree string="Sales Order Lines">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="check_" string="Select"/> 
+                                    <field name="state" invisible="1"/>
+                                    <field name="th_weight" invisible="1"/>
+                                    <field name="product_id"
+                                        context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'shop':parent.shop_id, 'uom':product_uom}"
+                                        groups="base.group_user" 
+                                        on_change="product_id_change(parent.pricelist_id, product_id, product_uom_qty, product_uom, product_uos_qty, product_uos, name, parent.partner_id, False, True, parent.date_order, False, parent.fiscal_position, False, context)"/>
+                                    <field name="name"/>
+                                    <field name="product_uom_qty"
+                                        context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'shop':parent.shop_id, 'uom':product_uom}"
+                                        on_change="product_id_change(parent.pricelist_id, product_id, product_uom_qty, product_uom, product_uos_qty, product_uos, name, parent.partner_id, False, False, parent.date_order, False, parent.fiscal_position, True, context)"/>
+                                    <field name="product_uom"
+                                        on_change="product_uom_change(parent.pricelist_id, product_id, product_uom_qty, product_uom, product_uos_qty, product_uos, name, parent.partner_id, False, False, parent.date_order, context)"
+                                        groups="product.group_uom" options='{"no_open": True}'/>
+                                    <field name="product_uos_qty" groups="product.group_uos" invisible="1"/>
+                                    <field name="product_uos" string="UoS" groups="product.group_uos" invisible="1"/>
+                                    <field name="tax_id" widget="many2many_tags" domain="[('parent_id','=',False),('type_tax_use','&lt;&gt;','purchase')]"/>
+                                    <field name="price_unit"/>
+                                    <field name="discount" />
+                                    <field name="dicount_number"/>
+                                    <field name="price_subtotal"/>
+                                </tree>
+                            </field>                
+			</xpath>  
+                     <xpath expr="/form/sheet/notebook/page/group/div/button[@name='button_dummy']" position="replace">
+                            <button name="button_dummy" states="draft,sent,waiting_manager,waiting_director" string="(update)" type="object" class="oe_edit_only oe_link" groups="gs_hpusa_order.group_view_bom_hpusa,gs_hpusa_order.group_view_bom_cost"/>                            
+                     </xpath>   
+                     <xpath expr="/form/sheet/notebook/page/group/group[@name='sale_pay']/field[@name='fiscal_position']" position="replace">
+                            <field name="fiscal_position" widget="selection" invisible="1"/>
+	              </xpath>
+	              
+                     
+	     </field>
+        </record>
+
+
+
+        <record id="sale.action_quotations" model="ir.actions.act_window">
+            <field name="name">Quotations</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="sale.view_quotation_tree"/>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="context">{'show_address': 1}</field>
+            <field name="domain">[('state','in',('draft','sent','cancel','waiting_manager','waiting_director','approved'))]</field>
+            <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a quotation, the first step of a new sale.
+              </p><p>
+                OpenERP will help you handle efficiently the complete sale flow:
+                from the quotation to the sales order, the
+                delivery, the invoicing and the payment collection.
+              </p><p>
+                The social feature helps you organize discussions on each sales
+                order, and allow your customers to keep track of the evolution
+                of the sales order.
+              </p>
+            </field>
+        </record>
+
+        <record id="sale.action_orders" model="ir.actions.act_window">
+            <field name="name">Sales Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar,graph</field>
+            <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+            <field name="context">{'show_address': 1}</field>
+            <field name="domain">[('state','not in',('draft','sent','cancel','waiting_manager','waiting_director','approved'))]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a quotation that can be converted into a sales
+                order.
+              </p><p>
+                OpenERP will help you efficiently handle the complete sales flow:
+                quotation, sales order, delivery, invoicing and payment.
+              </p>
+            </field>
+        </record>
+        
+        
+</data>
+</openerp>

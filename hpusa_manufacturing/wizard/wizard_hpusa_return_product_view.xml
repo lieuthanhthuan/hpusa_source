@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>	
+      <record id="view_stock_move_return_wizard" model="ir.ui.view">
+            <field name="name">return Move</field>
+            <field name="model">stock.move.return</field>
+            <field name="arch" type="xml">
+                <form string="return Move" version="7.0">
+                    <separator string="return Products"/>
+                    <group>
+                        <field name="product_id"  readonly="1"/>
+                        <label for="product_qty"/>
+                        <div>
+                            <field name="product_qty" class="oe_inline"/>
+                            <field name="product_uom" class="oe_inline" readonly="1" groups="product.group_uom"/>
+                        </div>
+                        <label for="weight_mo"/>
+                        <div>
+                            <field name="weight_mo" class="oe_inline"/>
+                            <field name="weight_mo_unit" class="oe_inline" groups="product.group_uom"/>
+                        </div>
+                        <field name="location_id" string="Return Location" widget="selection"
+                            domain="[('usage','!=','view'),('scrap_location','=',False)]" groups="stock.group_locations"/>
+                    </group>
+                    <footer>
+                        <button name="move_return" string="Ok" type="object" class="oe_highlight"  />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="move_return" model="ir.actions.act_window">
+            <field name="name">Return Move</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.move.return</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        
+     </data>
+   </openerp>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+<!--             <record id="email_template_edi_new_sale" model="email.template">
+	            <field name="name">New Sale Order</field>
+	            <field name="email_from">${object.user_id.email or ''}</field>
+	            <field name="subject">${object.company_id.name} New Sale Order ${object.name or 'n/a' }</field>
+	            <field name="email_recipients">admin@hpusa.com</field>
+	            <field name="model_id" ref="sale.model_sale_order"/>
+	            <field name="auto_delete" eval="True"/>
+	            <field name="report_name">${(object.name or '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}</field>
+	            <field name="body_html"><![CDATA[
+	             <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
+	   			  <p>New Sale Order ${object.name},</p>
+	             </div>
+	            ]]></field>
+             </record> -->
+             
+             <record id="email_template_edi_start_work_order" model="email.template">
+	            <field name="name">Start Work Order</field>
+	            <field name="email_from">${user.email or ''}</field>
+	            <field name="subject">Start Word Order ${object.name or 'n/a' }</field>
+	            <field name="email_recipients"></field>
+	            <field name="model_id" ref="mrp.model_mrp_production_workcenter_line"/>
+	            <field name="auto_delete" eval="True"/>
+	            <field name="report_name">${(object.name or '').replace('/','_')}_${object.state == 'draft' and 'draft' or ''}</field>
+	            <field name="body_html"><![CDATA[
+	             <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); ">
+	   			  <p> Start Work Order ${object.name},</p>
+	             </div>
+	            ]]></field>
+             </record>
+             
+             <record id="mrp_workcenter_3d" model="mrp.workcenter">
+	            <field name="name">3D Design</field>
+	            <field name="resource_type">user</field> 
+	            <field name="mo_state">3d</field> 
+             </record>
+             
+             <record id="mrp_workcenter_waxmodeling" model="mrp.workcenter">
+	            <field name="name">Waxmodeling</field>
+	            <field name="resource_type">user</field>
+	            <field name="mo_state">waxmodeling</field> 
+             </record>
+             
+             <record id="mrp_workcenter_casting" model="mrp.workcenter">
+	            <field name="name">Casting</field>
+	            <field name="resource_type">user</field>
+	            <field name="mo_state">casting</field> 
+             </record>
+             
+             <record id="mrp_workcenter_assembling" model="mrp.workcenter">
+	            <field name="name">Assembling</field>
+	            <field name="resource_type">user</field>
+	            <field name="mo_state">assembling</field> 
+             </record>
+             
+             <record id="mrp_workcenter_setting" model="mrp.workcenter">
+	            <field name="name">Setting</field>
+	            <field name="resource_type">user</field>
+	            <field name="mo_state">setting</field> 
+             </record>
+             
+             <record id="mrp_workcenter_polishing" model="mrp.workcenter">
+	            <field name="name">Polishing</field>
+	            <field name="resource_type">user</field>
+	            <field name="mo_state">polishing</field> 
+             </record>
+             
+              <record id="mrp_workcenter_engraving" model="mrp.workcenter">
+	            <field name="name">Engraving</field>
+	            <field name="resource_type">user</field>
+	            <field name="mo_state">engraving</field> 
+             </record>
+             
+        
+    </data>
+</openerp>

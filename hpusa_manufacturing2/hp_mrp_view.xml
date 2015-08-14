@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+	 <!-- Manufacturing Form view -->
+	 <record id="hpusa_manufacturing_form_view" model="ir.ui.view">
+            <field name="name">hp.mrp.production.form</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view" />
+            <field name="arch" type="xml">   
+               <xpath expr="/form/sheet/notebook/page[@string='Consumed Products']" position="before">
+	              	<page string="More Information">            			
+		              	<button name="update_loss" string="Calculate" type="object" class="oe_highlight"/>
+		              	<group> 		              		
+				            <group>
+					        	<field name="employee_id"/>	   
+					        	<field name="wo_id"/>
+					            <field name="metal_delivery" sum="Total Metal"/>
+					            <field name="metal_return" sum="Total Return"/>
+					            <field name="metal_used"/>
+					            <field name="finished_weight"/>
+				             </group>
+				             <group>
+					            <field name="work_state"/> 
+						        <field name="metal_in_product" sum="Metal in Product"/>
+						        <field name="diamond_weight"/>
+						        <field name="loss_weight" sum="Total Loss Weight"/>
+						        <label for="loss_percent" />
+                                			<div name="loss_percent">
+                                				<field name="loss_percent" class="oe_inline"/> %%
+                                			</div>					              		 
+				             </group>		              		  		 		              		             		      	
+			      		</group>                
+	              </page>
+              </xpath>	            	  
+            </field>
+       </record>
+	
+	<record id="hpusa_manufacturing_form_view2" model="ir.ui.view">
+            <field name="name">hp.mrp.production.form</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="hpusa_manufacturing.hp_mrp_production_form_view" />
+            <field name="arch" type="xml">   
+               <field name="user_id" position="after">
+               		<field name="mo_date"/>
+               </field>  	  
+            </field>
+       </record>
+
+
+       
+       
+       <record id="hp_view_manufacturing_order_tree" model="ir.ui.view">
+            <field name="name">hpusa.manufacturing.oder.tree</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_tree_view" />
+            <field name="arch" type="xml">
+            	<field name="product_id" position="after">
+			<field name="mo_date"/>
+			<field name="finished_weight"/>
+            		<field name="metal_used"/>
+				    <field name="metal_in_product"/>
+            		<field name="loss_weight"/>
+				    <field name="loss_percent"/>
+				    <field name="wo_id"/>
+			        <field name="work_state"/>
+			        <field name="employee_id"/>	            
+            	</field>
+            </field>
+        </record>
+        
+		<record id="hpusa_view_mrp_production_form_view_filter" model="ir.ui.view">
+        <field name="name">hpusa.mrp.production.line.select</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.view_mrp_production_filter"/>
+        <field name="arch" type="xml">
+        	 <filter string="Product" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'product_id'}" position="after">
+        	 	<filter name="group_work_order" string="Work Order" icon="terp-go-home" domain="[]" context="{'group_by':'wo_id'}"/>
+        	 	<filter name="group_work_state" string="Work Order State" icon="terp-go-home" domain="[]" context="{'group_by':'work_state'}"/>
+        	 	<filter name="group_worker" string="Worker" icon="terp-go-home" domain="[]" context="{'group_by':'employee_id'}"/>
+        	 </filter>
+        </field>
+      </record>                            
+	</data>
+</openerp>	

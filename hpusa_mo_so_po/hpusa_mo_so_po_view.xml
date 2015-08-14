@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+	 <!-- Inheritance Manufacturing Order view -->
+		<record model="ir.ui.view" id="hpusa_mrp_production_inheritance">
+            <field name="name">Manufacturing Order</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view" />
+            <field name="arch" type="xml">
+				<page name="extra_infomation" position="after">
+					<page string="Purchase Orders">
+			        	<field name="purchase_id_master"></field>
+			        </page>
+			    </page>
+            </field>
+        </record>
+
+        <!-- Inheritance Purchase Order Tree View -->
+        <record model="ir.ui.view" id="hp_mrp_purchase_tree_view_inherit">
+            <field name="name">hp.mrp.purchase.order.tree</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_tree" />
+            <field name="arch" type="xml">
+            	<field name="origin" position="after">
+            		<field name="sale_id"/>
+			<field name="pickup_date"/>
+            		<field name="mrp_id"/>
+                        <field name="related_po"/>
+            	</field>
+            </field>
+      	</record>
+
+	<record id="hpusa_purchase_order_form" model="ir.ui.view">
+            <field name="name">hp.purchase.order</field>
+            <field name="model">purchase.order</field>
+	    <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+		<field name="date_order" position="after">
+	            <field name="pickup_date"/>
+	            <field name="sale_id"/>
+	     	</field>
+                <field name="partner_ref" position="after">
+            		<field name="related_po"/>
+            	</field>
+	     </field>
+   	</record>
+
+	</data>
+</openerp>

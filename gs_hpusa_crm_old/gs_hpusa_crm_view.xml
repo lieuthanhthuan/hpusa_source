@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>	 
+
+ 	<record id="hpusa_crm_case_section_view_form" model="ir.ui.view">
+            <field name="name">crm.case.section.form</field>
+            <field name="model">crm.case.section</field>
+			<field name="inherit_id" ref="crm.crm_case_section_view_form"/>
+            <field name="arch" type="xml">
+				<page string="Sales Team" position="before">
+					<page string="Team Leader Group">
+	                     <field name="team_lead_ids" nolabel="1"/>
+	                </page>
+	            </page>            	     
+	     </field>
+   	</record>  
+   	
+ 	<record id="gs_crm_case_form_view_oppor" model="ir.ui.view">
+            <field name="name">crm.lead.form</field>
+            <field name="model">crm.lead</field>
+			<field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+            <field name="arch" type="xml">
+				<field name="phone" position="after">
+	                     <field name="mobile"/>
+	            </field>            	     
+	     </field>
+   	</record>  
+  <record id="hpuusa_vview_crm_case_leads_filter" model="ir.ui.view">
+        <field name="name">crm.lead.filter</field>
+        <field name="model">crm.lead</field>
+		<field name="inherit_id" ref="crm.view_crm_case_leads_filter"/>
+        <field name="arch" type="xml">
+        	<filter string="Open" name="open" domain="[('state','!=','cancel')]" help="Open Leads" position="before">
+        		<filter icon="terp-go-month" string="   Month   " name="month" domain="[('create_date','&lt;=', time.strftime('%%Y-%%m-%%d')),('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]" help="Leads created in current month"/>
+        	</filter>
+        	 <filter string="Creation" domain="[]" context="{'group_by':'create_date'}" position="after">
+        	 	<filter string="Deadline" domain="[]" context="{'group_by':'date_deadline'}"/>
+        	 </filter>
+        </field>
+  </record>
+  
+  <record id="hpuusa_view_crm_case_opportunities_filter" model="ir.ui.view">
+        <field name="name">crm.lead.filter</field>
+        <field name="model">crm.lead</field>
+		<field name="inherit_id" ref="crm.view_crm_case_opportunities_filter"/>
+        <field name="arch" type="xml">
+        	<filter string="New" name="new" domain="[('state','=','draft')]" help="New Opportunities" position="before">
+        		<filter icon="terp-go-month" string="   Month   " name="month" domain="[('create_date','&lt;=', time.strftime('%%Y-%%m-%%d')),('create_date','&gt;=',time.strftime('%%Y-%%m-01'))]" help="Leads created in current month"/>
+        	</filter>
+        	 <filter string="Creation" domain="[]" context="{'group_by':'create_date'}" position="after">
+        	 	<filter string="Deadline" domain="[]" context="{'group_by':'date_deadline'}"/>
+        	 </filter>
+        </field>
+  </record>
+    <record id="gs_crm_case_form_view_leads" model="ir.ui.view">
+            <field name="name">GS CRM - Leads Form</field>
+			<field name="model">crm.lead</field>
+			<field name="inherit_id" ref="crm.crm_case_form_view_leads"/>
+            <field name="arch" type="xml">         	     
+			<field name="user_id" position="after" version="7.0">
+                     <field name="ownermanager_ids" widget="many2many_tags"/>
+                     <field name="involvestaff_ids" widget="many2many_tags"/> 
+            </field> 
+			<field name="categ_ids" position="after" version="7.0">
+                     <field name="lead_source_id" />
+                     <field name="keyword_id" />
+                     <field name="lead_date"/>
+                     <field name="remark"/> 
+            </field>
+            <field name="section_id" position="replace" version="7.0">
+            		<field name="section_id" on_change="onchange_salesteam(section_id)"/>
+            </field>          	              	     
+	     </field>
+   	</record>
+	<record id="gs_crm_case_tree_view_leads" model="ir.ui.view">
+            <field name="name">GS Leads</field>
+            <field name="model">crm.lead</field>
+			<field name="inherit_id" ref="crm.crm_case_tree_view_leads"/>
+            <field name="arch" type="xml">
+			<field name="phone" position="after" version="7.0">
+					
+                     <field name="ownermanager_ids"/>
+                     <field name="involvestaff_ids"/> 
+                     <field name="company_id"/>
+            </field>
+            <field name="create_date" position="after" version="7.0">
+                     <field name="categ_ids"/>
+                     <field name="lead_date"/> 
+            </field>
+            <field name="user_id" position="replace" version="7.0">	
+                     <field name="user_id" invisible="0" />
+            </field>  
+	     </field>
+   	</record>
+	<record id="gs_crm_case_form_view_oppor" model="ir.ui.view">
+            <field name="name">GS Opportunities</field>
+            <field name="model">crm.lead</field>
+			<field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+            <field name="arch" type="xml">
+             <field name="mobile" position="replace"/>
+            <field name="phone" position="after">
+	                     <field name="mobile"/>
+	            </field>  
+			<field name="user_id" position="after" version="7.0">
+                     <field name="ownermanager_ids" widget="many2many_tags"/>
+                     <field name="involvestaff_ids" widget="many2many_tags"/> 
+            </field>  
+			<field name="categ_ids" position="after" version="7.0">
+                     <field name="lead_source_id" />
+                     <field name="keyword_id" />
+                     <field name="lead_date"/>
+                     <field name="company_id"/>
+                     <field name="remark"/>  
+            </field>            	     
+	     <field name="section_id" position="replace" version="7.0">
+            		<field name="section_id" on_change="onchange_salesteam(section_id)"/>
+            </field>
+            <field name="planned_revenue" position="replace" version="7.0">
+            		<field name="planned_revenue" class="oe_inline" widget='monetary' options="{'currency_field': 'company_currency'}" groups="gs_hpusa_project.group_ownermanager"/>
+            </field>            
+            <field name="probability" position="replace" version="7.0">
+            		<field name="probability" class="oe_inline" widget="integer" groups="gs_hpusa_project.group_ownermanager"/>
+            </field>      	     
+	     </field>
+   	</record>
+	<record id="gs_crm_case_tree_view_oppor" model="ir.ui.view">
+            <field name="name">GS Opportunities Tree</field>
+            <field name="model">crm.lead</field>
+			<field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+            <field name="arch" type="xml">
+			<field name="user_id" position="after" version="7.0">
+                     <field name="ownermanager_ids"/>
+                     <field name="involvestaff_ids"/>
+                     <field name="company_id"/> 
+            </field>
+            <field name="create_date" position="after" version="7.0">
+                     <field name="categ_ids"/>
+                     <field name="lead_date"/> 
+            </field>            	     
+	     </field>
+   	</record>
+	
+	
+	<record id="gs_view_account_analytic_account_form" model="ir.ui.view">
+            <field name="name">gs.analytic.analytic.account.form</field>
+            <field name="model">account.analytic.account</field>
+			<field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+            <field name="arch" type="xml">
+			<field name="manager_id" position="after" version="7.0">
+                     <field name="user_id"/>
+			<field name="ownermanager_ids" widget="many2many_tags"/>
+                     <field name="involvestaff_ids" widget="many2many_tags"/> 
+            </field>            	     
+	     </field>
+   	</record>
+	<record id="gs_crm_case_phone_form_view" model="ir.ui.view">
+            <field name="name">GS CRM - Phone Call Form</field>
+			<field name="model">crm.phonecall</field>
+			<field name="inherit_id" ref="crm.crm_case_phone_form_view"/>
+            <field name="arch" type="xml">
+			<field name="user_id" position="after" version="7.0">
+                     <field name="ownermanager_ids" widget="many2many_tags"/>
+                     <field name="involvestaff_ids" widget="many2many_tags"/> 
+            </field>            	     
+	     </field>
+   	</record>
+	<record id="gs_crm_case_phone_tree_view" model="ir.ui.view">
+            <field name="name">GS CRM - Phone Calls Tree</field>
+			<field name="model">crm.phonecall</field>
+			<field name="inherit_id" ref="crm.crm_case_phone_tree_view"/>
+            <field name="arch" type="xml">
+			<field name="user_id" position="after" version="7.0">
+                     <field name="ownermanager_ids"/>
+                     <field name="involvestaff_ids"/>
+                     <field name="company_id"/> 
+            </field>            	     
+	     </field>
+   	</record>
+	<record id="gs_crm_case_inbound_phone_tree_view" model="ir.ui.view">
+            <field name="name">GS CRM - Logged Phone Calls Tree</field>
+			<field name="model">crm.phonecall</field>
+			<field name="inherit_id" ref="crm.crm_case_inbound_phone_tree_view"/>
+            <field name="arch" type="xml">
+			<field name="user_id" position="after" version="7.0">
+                     <field name="ownermanager_ids"/>
+                     <field name="involvestaff_ids"/> 
+                     <field name="company_id"/>
+            </field>            	     
+	     </field>
+   	</record>
+	
+       <record model="ir.ui.view" id="gs_crm_vip_program_form">
+            <field name="name">crm.vip.program.form</field>
+            <field name="model">crm.vip.program</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <form string="Vip program" version="7.0">
+                     <field name="name"/> 
+			<field name="description" placeholder="Description"/> 
+			<separator string="Customer Members"/>	
+			<field name="customer_ids" widget="many2many_kanban" /> 			
+ 
+                </form>
+            </field>
+        </record>
+
+       
+       <record id="gs_crm_vip_program_tree" model="ir.ui.view">
+            <field name="name">crm.vip.program.tree</field>
+            <field name="model">crm.vip.program</field>
+            <field name="arch" type="xml">
+                <tree string="Vip Program">
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+       <record id="gs_crm_vip_program_act" model="ir.actions.act_window">
+            <field name="name">Vip Program</field>
+            <field name="res_model">crm.vip.program</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="gs_crm_vip_program_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new Vip Program.
+              </p>
+            </field>
+        </record>
+	<menuitem action="gs_crm_vip_program_act" id="menu_gs_crm_vip_program" parent="base.menu_crm_config_lead" sequence="10"/>
+  
+       <record model="ir.ui.view" id="gs_crm_gifts_given_form">
+            <field name="name">crm.gifts.given.form</field>
+            <field name="model">crm.gifts.given</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <form string="Gifts Given" version="7.0">
+                     <field name="name"/> 
+			<field name="description" placeholder="Description"/> 
+			<separator string="Customer Members"/>	
+			<field name="customer_ids" widget="many2many_kanban" /> 			
+ 
+                </form>
+            </field>
+        </record>
+
+       
+       <record id="gs_crm_gifts_given_tree" model="ir.ui.view">
+            <field name="name">crm.gifts.given.tree</field>
+            <field name="model">crm.gifts.given</field>
+            <field name="arch" type="xml">
+                <tree string="Gifts Given">
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+       <record id="gs_crm_gifts_given_act" model="ir.actions.act_window">
+            <field name="name">Gifts Given</field>
+            <field name="res_model">crm.gifts.given</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="gs_crm_gifts_given_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new Gifts Given.
+              </p>
+            </field>
+        </record>
+	<menuitem action="gs_crm_gifts_given_act" id="menu_gs_crm_gifts_given" parent="base.menu_crm_config_lead" sequence="11"/>
+
+    
+       <record id="gs2_view_partner_form" model="ir.ui.view">
+            <field name="name">gs2.res.partner.form</field>
+            <field name="model">res.partner</field>
+	     <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">            	     
+            <xpath expr="/form/sheet/notebook/page/group/group/field[@name='supplier']" position="after">                     
+                            <field name="vip_program_id"/>
+				<field name="original_join_date"/>
+            			<field name="expiration_date"/>
+                            <field name="gifts_given_id"/>
+                            <field name="money_gifts"/>
+                            <field name="births_date"/>
+  				<field name="refer_a_friend_date"/>
+				<field name="refer_a_friend_coupon_date"/>                   
+            </xpath>  
+            <field name="website" position="after" version="7.0">
+                        <field name="customer_name_id"/>
+                        <field name="remark"/>
+            </field>             
+	     </field>
+   	</record>     
+       <record id="gs3_view_partners_form_crm1" model="ir.ui.view">
+                <field name="name">gs3view.res.partner.form.crm.inherited1</field>
+                <field name="model">res.partner</field>
+                <field name="inherit_id" ref="crm.view_partners_form_crm1"/>
+                <field eval="18" name="priority"/>
+                <field name="arch" type="xml">
+                   <field name="section_id" position="replace" version="7.0">
+            		<field name="section_id" on_change="onchange_salesteam(section_id)"/>
+                </field>
+                </field>
+        </record>
+
+       <record id="gs_view_partner_tree" model="ir.ui.view">
+            <field name="name">gs.res.partner.tree</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <field name="email" position="after" version="7.0">                
+                    <field name="vip_program_id" />
+                </field>
+            </field>
+        </record>
+
+       <record model="ir.ui.view" id="gs_crm_lead_source_form">
+            <field name="name">crm.lead.source.form</field>
+            <field name="model">crm.lead.source</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <form string="Lead Source" version="7.0">
+                     <field name="name"/> 
+			<field name="description" placeholder="Description"/> 		
+ 
+                </form>
+            </field>
+        </record>
+
+       
+       <record id="gs_crm_lead_source_tree" model="ir.ui.view">
+            <field name="name">crm.lead.source.tree</field>
+            <field name="model">crm.lead.source</field>
+            <field name="arch" type="xml">
+                <tree string="Lead Source">
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+       <record id="gs_crm_lead_source_act" model="ir.actions.act_window">
+            <field name="name">Lead Source</field>
+            <field name="res_model">crm.lead.source</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="gs_crm_lead_source_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new Lead Source.
+              </p>
+            </field>
+        </record>
+	<menuitem action="gs_crm_lead_source_act" id="menu_gs_crm_lead_source" parent="base.menu_crm_config_lead" sequence="12"/>
+
+       <record model="ir.ui.view" id="gs_crm_keyword_form">
+            <field name="name">crm.keyword.form</field>
+            <field name="model">crm.keyword</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <form string="Keyword" version="7.0">
+                     <field name="name"/> 
+			<field name="description" placeholder="Description"/> 		
+ 
+                </form>
+            </field>
+        </record>
+
+       
+       <record id="gs_crm_keyword_tree" model="ir.ui.view">
+            <field name="name">crm.keyword.tree</field>
+            <field name="model">crm.keyword</field>
+            <field name="arch" type="xml">
+                <tree string="Keyword">
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+       <record id="gs_crm_keyword_act" model="ir.actions.act_window">
+            <field name="name">Keyword</field>
+            <field name="res_model">crm.keyword</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="gs_crm_keyword_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new Keyword.
+              </p>
+            </field>
+        </record>
+	<menuitem action="gs_crm_keyword_act" id="menu_gs_crm_keyword" parent="base.menu_crm_config_lead" sequence="11"/>
+
+       <record model="ir.ui.view" id="gs_view_note_note_form">
+            <field name="name">gs.note.note.form</field>
+        	<field name="model">note.note</field>
+        	<field name="inherit_id" ref="note.view_note_note_form"/>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">                
+	              <field name="stage_id" position="after" version="7.0">
+                     <field name="user_id" />
+                     <field name="company_id"/> 
+            </field>            	     
+					
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="gs_view_marketing_campaign_segment_form">
+            <field name="name">gs.marketing.campaign.segment.form</field>
+        	<field name="model">marketing.campaign.segment</field>
+        	<field name="inherit_id" ref="marketing_campaign.view_marketing_campaign_segment_form"/>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">                
+	              <field name="date_done" position="after" version="7.0">
+                     <field name="user_id" />
+                     <field name="company_id"/> 
+            </field>            	     
+					
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="gs_view_marketing_campaign_workitem_form">
+            <field name="name">gs.marketing.campaign.workitem.form</field>
+        	<field name="model">marketing.campaign.workitem</field>
+        	<field name="inherit_id" ref="marketing_campaign.view_marketing_campaign_workitem_form"/>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">                
+	              <field name="partner_id" position="after" version="7.0">
+                     <field name="user_id" />
+                     <field name="company_id"/> 
+            </field>            	     
+					
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="gs_view_marketing_campaign_form">
+            <field name="name">gs.marketing.campaign.form</field>
+        	<field name="model">marketing.campaign</field>
+        	<field name="inherit_id" ref="marketing_campaign.view_marketing_campaign_form"/>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">                
+	              <field name="fixed_cost" position="after" version="7.0">
+                     <field name="user_id" />
+                     <field name="company_id"/> 
+            </field>            	     
+					
+            </field>
+        </record>
+  
+
+</data>
+</openerp>

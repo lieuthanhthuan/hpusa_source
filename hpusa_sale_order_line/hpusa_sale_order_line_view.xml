@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+        <!-- Inheritance Purchase Order Tree View -->
+        <record model="ir.ui.view" id="hp_sale_order_line_tree_view_inherit">
+            <field name="name">Order Line</field>
+            <field name="model">sale.order.line</field>
+            <field name="inherit_id" ref="sale.view_order_line_tree" />
+            <field name="arch" type="xml">
+            	<field name="invoiced" position="after">
+            		<field name="work_order"/>
+            		<field name="work_order_status"/>
+            	</field>
+            </field>
+      	</record>
+
+      	<record id="hpusa_sale_order_line_filter" model="ir.ui.view">
+            <field name="name">Sale Order Line</field>
+            <field name="model">sale.order.line</field>
+            <field name="inherit_id" ref="sale.view_sales_order_line_filter"/>
+            <field name="arch" type="xml">
+            	<filter string="Status" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}" position="after">
+            	 	<filter string="Work Center" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'work_order'}"/>
+            	 	<filter string="Manufacturing State" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'work_order_status'}"/>
+            	</filter>
+            </field>
+       </record>
+
+	</data>
+</openerp>

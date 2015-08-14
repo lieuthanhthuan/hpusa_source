@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+    <data>
+   	        <record model="ir.ui.view" id="gs_wizard_report_view">
+            <field name="name">gs.wizard.report.form</field>
+            <field name="model">gs.wizard.report</field>
+            <field name="arch" type="xml">
+                <form string="BOM" version="7.0">
+<script>
+function printDiv(divId) {
+    window.frames["print_frame"].document.body.innerHTML=$(".oe_form_nosheet" ).html();
+    console.log($(".oe_form_embedded_html" ).html());
+    window.frames["print_frame"].window.focus();
+    window.frames["print_frame"].window.print();
+}
+</script>
+<a href="javascript:printDiv('view_bom')"><input type="button" class="oe_button oe_highlight" value="Print"></input ></a>
+                    <field name="context" readonly="1"/>
+                    <footer>
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                            <script>
+                            $('.ui-dialog').css({ "width": 'auto', 'left': '0px'});
+                            $('.oe_form_field').css({  'margin-left': '70px'});
+                            $('.cleditorMain').css({ "height": '500px'});
+                            $('iframe').css({ "height": '500px'});
+                        </script>
+                        <style>
+                        table, td, th {
+                             border: 1px solid white;
+                        }
+                        </style>
+
+                    </footer>
+<iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
+                </form>
+            </field>
+        </record>
+       <record id="action_gs_wizard_report_view" model="ir.actions.act_window">
+            <field name="name">BOM</field>
+            <field name="res_model">gs.wizard.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+   </data>     
+</openerp>
+    

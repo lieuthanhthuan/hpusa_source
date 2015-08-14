@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+	 <!-- Inheritance Partner view -->
+		<record model="ir.ui.view" id="hpusa_customer_cooperate">
+            <field name="name">Customer</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+	        	<field name="ref" position="replace">
+	            	<field name="refer_from" />
+	            </field>
+	            <page name="page_history"  position="after">
+					<page string="Affiliate Or A.R">
+					 	<group>
+		                 	<field name="is_agent_cooperate"/>
+		                 	<field name="option_choose"  style="width:100px;"  attrs="{'invisible':[('is_agent_cooperate','=',False)]}"/>
+		                 	<!--field name="code" attrs="{'invisible':[('is_agent_cooperate','=',False)]}"/-->
+		                 	<!--field name="commission_rule" attrs="{'invisible':[('is_agent_cooperate','=',False)]}"/-->
+	                 	 </group>
+	                 	 <group>
+		                 	<page string="Affiliate Or A.R MGR"   attrs="{'invisible':[('is_agent_cooperate','=',False)]}">
+				          		<field name="ticket_master" >
+					          		<tree string="Issue By" >
+						                <field name="name"/>
+						                <field name="quantity" sum="Total Quantity"/>
+						                <field name="used_quantity" sum="Total used"/>
+						                <field name="giving_date"/>
+						                <field name="date_to"/>
+						            </tree>
+						       </field>
+				           	</page>
+				          </group>
+		             	</page>
+            		</page>
+            </field>
+        </record>
+
+         <!-- HPUSA Refer a Friend Form View -->
+
+  		<record id="refer_a_friend_fiter" model="ir.ui.view">
+            <field name="name">Refer a friends</field>
+            <field name="model">ticket.referafriend</field>
+            <field name="arch" type="xml">
+                <search string="Filters">
+                    <group expand="0" string="Group By...">
+                        <filter string="Customer" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'contact_id'}" help="Order reference"/>
+                        <filter string="Giving Date" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'giving_date'}"/>
+                        <filter string="Expiration Date" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'date_to'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+	<record id="hpusa_refer_a_friend_view" model="ir.ui.view">
+            <field name="name">Refer A Friends</field>
+            <field name="model">ticket.referafriend</field>
+            <field name="arch" type="xml">
+                <form string="Refer a Friends" version="7.0">
+            		<sheet>
+	            		<div class="oe_title">
+	                    	<label for="name" class="oe_edit_only"/>
+	                        <h1><field name="name"/></h1>
+	                    </div>
+	            		<group>
+			            	<group>
+				                <field name="contact_id" readonly="1"/>
+				                <field name="quantity" select="0"/>
+				                <field name="used_quantity" select="0"/>
+				            </group>
+				            <group>
+				                <field name="giving_date" select="0"/>
+				                <field name="date_to" select="0"/>
+				                <button name="action_update" string="Update" type="object" />
+				            </group>
+				        </group>
+				            <notebook>
+					            <page string="Issue By">
+			                    	<field name="refer_ids_master"/>
+			                    </page>
+		                    </notebook>
+				    </sheet>
+				    <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+	                </div>
+            	</form>
+        </field>
+    </record>
+
+<!--HPUSA Refer A Friend Tree View -->
+    <record model="ir.ui.view" id="hpusa_refer_a_friend_tree">
+        <field name="name">Refer A Friends</field>
+        <field name="model">ticket.referafriend</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Refer a Friends">
+                <field name="name"/>
+                <field name="contact_id" readonly="1"/>
+                <field name="quantity" sum="Total Quantity"/>
+                <field name="used_quantity" sum="Total used"/>
+                <field name="giving_date"/>
+                <field name="date_to"/>
+            </tree>
+        </field>
+    </record>
+
+<!--Marketing Report View Action -->
+    <record model="ir.actions.act_window" id="action_refer_a_friend_view">
+        <field name="name">Refer a friends</field>
+        <field name="res_model">ticket.referafriend</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+<record id="hpusa_refer_a_friend_issue_by_view" model="ir.ui.view">
+            <field name="name">Issue By</field>
+            <field name="model">referafriend.issue</field>
+            <field name="arch" type="xml">
+                <form string="Issue By" version="7.0">
+            		<sheet>
+	            		<div class="oe_title">
+	                    	<label for="Customer" class="oe_edit_only"/>
+	                        <h1><field name="refer_ids" on_change="onchange_partner_id(refer_ids,context)"/></h1>
+	                    </div>
+			            	<group>
+				                <field name="phone" readonly="1"/>
+				                <field name="mobile" select="0"/>
+				                <field name="customer_id" select="0"/>
+				            </group>
+				    </sheet>
+            	</form>
+        </field>
+    </record>
+	<!--HPUSA Refer A Friend Issue View -->
+	    <record model="ir.ui.view" id="hpusa_refer_a_friend_issue_by_tree">
+	        <field name="name">Issue By</field>
+	        <field name="model">referafriend.issue</field>
+	        <field name="type">tree</field>
+	        <field name="arch" type="xml">
+	            <tree string="Issue By">
+	                <field name="refer_ids"/>
+	                <field name="customer_id" readonly="1"/>
+	                <field name="mobile"/>
+	                <field name="phone"/>
+	            </tree>
+	        </field>
+	    </record>
+
+<!--Marketing Report View Action -->
+    <record model="ir.actions.act_window" id="action_refer_a_friend_issue_by_view">
+        <field name="name">Issue By</field>
+        <field name="res_model">referafriend.issue</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+        <menuitem name="Refer a friends" id="menu_refer_a_friend" parent="base.menu_base_partner"  action="action_refer_a_friend_view"/>
+        <menuitem name="Refer a friends" id="menu_refer_a_friend_item" parent="menu_refer_a_friend"
+            action="action_refer_a_friend_view" sequence="10" />
+	</data>
+</openerp>

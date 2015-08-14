@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>		
+		<record model="ir.ui.view" id="hpusa_product_normal_form_view">
+            <field name="name">hp.product.normal.form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view" />
+            <field name="priority">17</field>
+            <field name="arch" type="xml">
+                 <field name="categ_id" position="replace">
+                 	<field name="categ_id" on_change="onchang_category(categ_id)"/>
+                 </field>
+                 <field name="sale_ok" position="replace">
+                 		<field name="is_component" invisible="1"/>
+                 		<field name="sale_ok" attrs="{'readonly':[('is_component','=',True)]}"/>
+                 </field>
+                 <field name="purchase_ok" position="replace">
+               		<field name="purchase_ok" attrs="{'readonly':[('is_component','=',True)]}"/>
+               	</field>
+               	<field name="type" position="before">
+               		<field name="hp_type"/>
+                    <field name="metal_type"/>
+               		<field name="setting_price"/>
+               		<!--field name="hp_style"/-->
+               		<field name="coeff_24k"/>
+               	</field>
+            </field>
+        </record>     
+	</data>
+</openerp>

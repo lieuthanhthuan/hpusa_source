@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+	<record id="view_hpusa_loyalty_report_1_tree" model="ir.ui.view">
+        <field name="name">hpusa.loyalty.report.1.tree</field>
+        <field name="model">hpusa.loyalty.report.1</field>
+        <field name="arch" type="xml">
+        	 <tree string="Loyalty Analysis" create="false" version="7.0">
+        	 	<field name="company_id"/>
+        	 	<field name="program_id"/>
+                <field name="partner_id"/>
+                <field name="voucher_id"/>
+                <field name="point_current"/>
+                <field name="point_voucher"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_hpusa_loyalty_report_1_search" model="ir.ui.view">
+        <field name="name">hpusa.loyalty.report.1.search</field>
+        <field name="model">hpusa.loyalty.report.1</field>
+        <field name="arch" type="xml">
+            <search string="Loyalty Analysis">
+            	<field name="company_id"/>
+            	<field name="program_id"/>
+                <field name="partner_id"/>
+                <field name="voucher_id"/>
+                <group expand="1" string="Group By...">
+                	<filter string="Company" icon="terp-personal" name="Company" context="{'group_by':'company_id'}"/>
+                	<filter string="Program" icon="terp-personal" name="Program" context="{'group_by':'program_id'}"/>
+                    <filter string="Customer" icon="terp-personal" name="Customer" context="{'group_by':'partner_id'}"/>
+                    <filter string="Voucher" icon="terp-accessories-archiver"  name="Voucher" context="{'group_by':'voucher_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+	    <record id="view_hpusa_loyalty_report_graph" model="ir.ui.view">
+	         <field name="name">hpusa.loyalty.report.1.graph</field>
+	         <field name="model">hpusa.loyalty.report.1</field>
+	         <field name="arch" type="xml">
+	             <graph string="Register Loyalty" type="bar">
+	                 <field name="partner_id"/>
+	                 <field name="point_current"/>
+                	 <field name="point_voucher"/>
+	             </graph>
+	         </field>
+	    </record>	
+	    	        		
+		<record id="action_view_hpusa_loyalty_report_1_tree" model="ir.actions.act_window">
+			<field name="name">Report</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hpusa.loyalty.report.1</field>
+			<field name="view_id" ref="view_hpusa_loyalty_report_1_tree"/>
+			<field name="view_mode">tree_loyaty_quickadd,graph</field>
+		</record>	
+   
+     <menuitem id="menu_action_view_wizard_hpusa_loyalty_report" name="Loyalty Report" parent="parrent_loyalty" action="action_view_hpusa_loyalty_report_1_tree"  sequence="7"/>
+ 
+</data>
+</openerp>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>		
+		<record model="ir.ui.view" id="hpusa_product_normal_2_form_view">
+            <field name="name">hp.product.normal.form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view" />
+            <field name="priority">17</field>
+            <field name="arch" type="xml">
+               	<field name="default_code" position="after">
+               		<field name="hp_sku"/>
+               		<field name="serial_number"/>
+               		<field name="weight_available"/>
+               	</field>
+            </field>
+        </record>     
+	</data>
+</openerp>

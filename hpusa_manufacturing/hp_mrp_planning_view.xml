@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>	
+	
+		<record id="hp_mrp_planning_tree_view" model="ir.ui.view">
+            <field name="name">mo.planning.tree</field>
+            <field name="model">mo.planning</field>
+            <field name="arch" type="xml">
+                <tree string="Mo Planning">
+                    <field name="name"/>
+                    <field name="routing_id"/>
+                    <field name="product_id"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+        	
+		 <record id="hp_mrp_planning_form_view" model="ir.ui.view">
+            <field name="name">mo.planning.form</field>
+            <field name="model">mo.planning</field>
+            <field name="arch" type="xml">
+                <form string="Mo Planning" version="7.0">
+                	<header>
+                			<button name="button_3d" string="3D Design" type="object" class="oe_highlight"/>
+                			<button name="button_3d_view" string="View 3D Design" type="object" class="oe_highlight"/>
+                	</header>
+                	<sheet>
+	                    <group>
+	                        <group>
+	                        	<field name="sale_order"/>
+	                            <field name="product_id" context="{'default_supply_method':'produce'}" class="oe_inline"/>
+	                            <label for="routing_id" class="oe_inline"/>
+	                            <div>
+	                            	<field name="routing_id" on_change="onchange_routing(routing_id)" class="oe_inline"/>
+	                            </div>
+	                        </group>
+	                        <group>
+	                            <field name="name"/>
+	                            <field name="company_id" string="Company" widget="selection"/>
+	                        </group>
+	                    </group>
+	                    <notebook>
+	                        <page string="Components">
+	                            <field name="components">
+	                            	<tree editable="bottom">
+	                            		<field name="sequence"/>
+	                            		<field name="name"/>
+	                            		<field name="product_id"/>
+	                            		<field name="workcenter_id"/>
+	                            		<field name="hour_nbr"/>
+	                            		<field name="cycle_nbr"/>
+	                            		<field name="employee_id"/>
+	                            		<field name="location_id"/>
+	                            		<field name="company_id"/>
+	                            	</tree>
+	                            </field>
+	                        </page>
+	                    </notebook>
+	                  </sheet>
+                </form>
+            </field>
+        </record>    
+        <record id="view_mo_planning_filter" model="ir.ui.view">
+            <field name="name">mo.planning.filter</field>
+            <field name="model">mo.planning</field>
+            <field name="arch" type="xml">
+                <search string="Search MO Planning">
+                    <field name="product_id"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="sale_order" groups="base.group_multi_company"/>
+                </search>
+            </field>
+        </record>
+        <record id="hp_mrp_planning_form_action" model="ir.actions.act_window">
+            <field name="name">MO Planning</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mo.planning</field>
+            <field name="search_view_id" ref="view_mo_planning_filter"/>
+            <field name="view_type">form</field>
+        </record>
+        
+        <!-- <menuitem action="hp_mrp_planning_form_action" parent="mrp.menu_mrp_manufacturing" groups="base.group_no_one,product.group_mrp_properties" id="hp_menu_mrp_planning_action" sequence="35"/> -->
+        
+       
+	</data>
+</openerp>

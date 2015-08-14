@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="0">
+     <record id="group_view_discount" model="res.groups">
+        <field name="name">View Discount</field>
+     </record>
+     <record id="group_silversmiths" model="res.groups">
+        <field name="name">Silver Smiths</field>
+     </record>
+     <record id="group_view_bom_hpusa" model="res.groups">
+        <field name="name">View Bom</field>
+     </record> 
+     <record id="group_view_bom_cost" model="res.groups">
+        <field name="name">View Bom Cost Price</field>
+     </record> 
+      <record id="chang_password" model="res.groups">
+        <field name="name">Chang Password</field>
+     </record>       
+</data>
+</openerp>

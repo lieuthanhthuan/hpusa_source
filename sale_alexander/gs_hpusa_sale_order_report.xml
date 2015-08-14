@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report header='False' auto="False" id="sale.report_alexander_sale_order" model="sale.order" name="alex.sale.order"
+                rml="sale_alexander/report/gs_hpusa_sale_order.rml" string="Alexander / Order"
+                usage="default"/>
+
+        <report header='False' auto="False" id="report_alexander_bom_sale_order" model="sale.order" name="alex.bom.sale.order"
+                rml="sale_alexander/report/gs_hpusa_bom_sale_order.rml" string="Alexander Bom"
+                usage="default"/>
+
+		<report header='False' auto="False" id="report_alex_bom_sale_order_cost" model="sale.order" name="alex.bom.sale.order.cost"
+                rml="sale_alexander/report/gs_hpusa_bom_sale_order_cost.rml" string="Alexander Bom Cost"
+                usage="default"/>
+
+    </data>
+</openerp>

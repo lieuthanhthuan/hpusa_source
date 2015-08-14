@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report header='False' auto="False" id="sale.report_sale_order" model="sale.order" name="sale.order"
+                rml="gs_hpusa_order/report/gs_hpusa_sale_order.rml" string="Quotation / Order"
+                usage="default"/>
+
+        <report header='False' auto="False" id="report_bom_sale_order" model="sale.order" name="gs.bom.sale.order"
+                rml="gs_hpusa_order/report/gs_hpusa_bom_sale_order.rml" string="Bom Order"
+                usage="default"/>
+
+	<report header='False' auto="False" id="report_bom_sale_order_cost" model="sale.order" name="gs.bom.sale.order.cost"
+                rml="gs_hpusa_order/report/gs_hpusa_bom_sale_order_cost.rml" string="Bom Order Visible Cost"
+                usage="default"/>
+
+        <report header='False' auto="False" id="report_sale_order_vn" model="sale.order" name="gs.sale.order.vn"
+                rml="gs_hpusa_order/report/gs_hpusa_sale_order_vn.rml" string="Quotation / Order VN"
+                usage="default"/>
+
+        <report header='False' auto="False" id="report_bom_sale_order_vn" model="sale.order" name="gs.bom.sale.order.vn"
+                rml="gs_hpusa_order/report/gs_hpusa_bom_sale_order_vn.rml" string="Bom Order VN"
+                usage="default"/>
+       <report header='False' auto="False" id="report_bom_sale_order_vn_cost" model="sale.order" name="gs.bom.sale.order.vn.cost"
+                rml="gs_hpusa_order/report/gs_hpusa_bom_sale_order_vn_cost.rml" string="Bom Order VN Visible Cost"
+                usage="default"/>
+    </data>
+</openerp>

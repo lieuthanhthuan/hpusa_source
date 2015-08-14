@@ -1,0 +1,869 @@
+<?xml version="1.0"?>
+<openerp>
+<data>
+
+ <!-- Marketing Program search view -->
+		<record id="report_marketing_filter" model="ir.ui.view">
+            <field name="name">Report marketing</field>
+            <field name="model">report.marketing</field>
+            <field name="arch" type="xml">
+                <search string="Filters">
+                    <filter icon="terp-accessories-archiver" string="Active" domain="[('active','=',True)]" name="Actived" help="Actived"/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Start Date" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'date_start'}" help="Order reference"/>
+                        <filter string="End Date" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'date_stop'}"/>
+                        <filter string="Company" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'company'}"/>
+                        <filter string="State" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+     <!-- Report Marketing program form view -->
+	<record id="view_report_marketing_form" model="ir.ui.view">
+            <field name="name">Report Marketing</field>
+            <field name="model">report.marketing</field>
+            <field name="arch" type="xml">
+                <form string="Marketing Report" version="7.0">
+                    <header>
+                    	<button name="action_start" string="Submit" states="draft" class="oe_highlight"  groups="base.group_user" type="object"/>
+                    	<button name="action_end" string="Finish" states="inprogress" class="oe_highlight" groups="base.group_user" type="object"/>
+                    	<button name="action_cancel" string="Cancel" states="draft,inprogress" groups="base.group_user" type="object"/>
+                    	<button name="action_new" string="Set to Draft" states="cancel"  groups="base.group_user" type="object"/>
+            	 		<field name="state" widget="statusbar" statusbar_visible="draft,inprogress,done,cancel"/>
+            		</header>
+            		<sheet>
+	            		<div class="oe_title">
+	                    	<label for="name" class="oe_edit_only"/>
+	                        <h1><field name="name"/></h1>
+	                    </div>
+	            		<group>
+				            <group>
+				                <field name="date_start" select="0"/>
+				                <field name="date_stop" select="0"/>
+				                <field name="company" select="0"/>
+				                <field name="description"/>
+		                    </group>
+		                 </group>
+		                	<group col="4">
+			             <notebook>
+				            <page string="Report Lines">
+				            	<field name="report_line">
+				            		<tree>
+				            	   		<field name="name"/>
+	                					<field name="time_start"/>
+	                					<field name="time_end"/>
+	                					<field name="quantity_total" sum="Total quantity Sale Off"/>
+	                					<field name="quantity_website" sum="Quantity on Website"/>
+	                					<field name="quantity_sold" sum="Total Quantity Sold"/>
+	                				</tree>
+				            	</field>
+				            </page>
+			              </notebook>
+				       </group>
+				    </sheet>
+				    <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+	                </div>
+
+            	</form>
+        </field>
+    </record>
+
+<!--Report Marketing Tree View -->
+    <record model="ir.ui.view" id="view_loyalty_tree">
+        <field name="name">Report Marketing</field>
+        <field name="model">report.marketing</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Marketing Report">
+                <field name="name"/>
+                <field name="date_start"/>
+                <field name="date_stop"/>
+                <field name="company"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+ 	<record id="view_marketing_campaign_calendar" model="ir.ui.view">
+            <field name="name">Marketing Campaign</field>
+            <field name="model">report.marketing</field>
+            <field eval="2" name="priority"/>
+            <field name="arch" type="xml">
+                <calendar  date_start="date_start" string="Marketing Campaign">
+                    <field name="name"/>
+                    <field name="description"/>
+                </calendar>
+            </field>
+        </record>
+
+<record id="view_report_marketing_gantt" model="ir.ui.view">
+            <field name="name">Report Marketing</field>
+            <field name="model">report.marketing</field>
+            <field name="arch" type="xml">
+               <gantt string="Marketing Report" date_start="date_start" date_stop="date_stop" color="inventor_id">
+					<level object="report.marketing"  link="id" domain="[]">
+						<field name="name"/>
+					</level>
+				</gantt>
+            </field>
+        </record>
+
+<!--Marketing Report View Action -->
+    <record model="ir.actions.act_window" id="action_report_marketing">
+        <field name="name">Report Marketing</field>
+        <field name="res_model">report.marketing</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,calendar,gantt</field>
+    </record>
+
+<!--Marketing Report stage search View-->
+<record id="view_report_marketing_stage_filter" model="ir.ui.view">
+            <field name="name">Report marketing Stage</field>
+            <field name="model">report.marketing.stage</field>
+            <field name="arch" type="xml">
+                <search string="Filters">
+                    <filter icon="terp-accessories-archiver" string="Active" domain="[('active','=',True)]" name="Actived" help="Actived"/>
+                    <field name="name"/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Program" name="program_id" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'stage_master'}"/>
+                        <filter string="Stage" name="name" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'name'}"/>
+                        <filter string="Date Start" name="time_start" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'time_start'}"/>
+                        <filter string="Date End" name="time_end" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'time_end'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+<!--Marketing Report stage graph View-->
+	<record model="ir.ui.view" id="view_report_marketing_stage_graph">
+        <field name="name">Marketing Report Graph View</field>
+        <field name="model">report.marketing.stage</field>
+        <field name="type">graph</field>
+        <field name="arch" type="xml">
+        	<graph string = "Total idea score by Inventor">
+				<field name ="name" group="True"/>
+				<field name ="quantity_total" operator="+"/>
+				<field name ="quantity_website" operator="+"/>
+				<field name ="quantity_sold" operator="+"/>
+			</graph>
+        </field>
+  </record>
+
+<record id="view_report_marketing_stage_gantt" model="ir.ui.view">
+            <field name="name">Marketing Stage Gantt</field>
+            <field name="model">report.marketing.stage</field>
+            <field name="arch" type="xml">
+               <gantt string="Marketing Report" date_start="time_start" date_stop="time_end" color="inventor_id">
+					<level object="report.marketing"  link="id" domain="[]">
+						<field name="name"/>
+					</level>
+				</gantt>
+            </field>
+        </record>
+
+
+<!--Marketing Report stage Tree View-->
+    <record model="ir.ui.view" id="view_report_marketing_stage_tree">
+        <field name="name">report.marketing.stage.tree</field>
+        <field name="model">report.marketing.stage</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Report Lines">
+                <field name="stage_master"/>
+                <field name="name"/>
+                <field name="sale_off_percent"/>
+                <field name="time_start"/>
+                <field name="time_end"/>
+                <field name="quantity_total" sum="Total quantity Sale Off"/>
+                <field name="quantity_website" sum="Quantity on Website"/>
+                <field name="quantity_sold" sum="Total Quantity Sold"/>
+                <field name="company_id" />
+            </tree>
+        </field>
+    </record>
+
+ <!-- Marketing stage form view -->
+  <record id="view_marketing_stage_form" model="ir.ui.view">
+            <field name="name">report.marketing.stage.form</field>
+            <field name="model">report.marketing.stage</field>
+            <field name="arch" type="xml">
+                <form string="Marketing Stage" version="7.0">
+			    	<sheet>
+				    	<div class="oe_title">
+	                    	<label for="name" class="oe_edit_only"/>
+	                        <h1><field name="name"/></h1>
+	                    </div>
+				    	<group>
+				    		<group>
+					    		<field name="time_start"/>
+					        	<field name="time_end"/>
+					        	<field name="sale_off_percent" on_change="onchange_percent(sale_off_percent,context)"/>
+					        	<field name="company_id" readonly="1"/>
+				        	</group>
+				        	<group>
+				        		<field name="quantity_total" />
+	                    		<field name="quantity_website" />
+	                    		<field name="quantity_sold" />
+	                    		<button name="action_update" string="Update" type="object" />
+				        	</group>
+				        </group>
+				        <notebook>
+				        	<page string="Report Lines">
+				            	<field name="line_master_id">
+				            		<tree>
+	                					<field name="product_id"/>
+						                <field name="style"/>
+						                <field name="sku"/>
+						                <field name="sku_id" sum="Total Cost"/>
+						                <field name="product_type"  />
+						                <field name="product_quantity" sum="Total Quantity" />
+						                <field name="regular_price" sum="Total Regular "/>
+						                <field name="percent"/>
+						                <field name="sale_off_price" sum="Total sale off"/>
+						                <field name="state"/>
+						                <field name="sold_date"/>
+						        	</tree>
+				            	</field>
+				            </page>
+			             </notebook>
+			    	</sheet>
+		        <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            	</form>
+        </field>
+    </record>
+
+  <!-- stage Action -->
+ <record model="ir.actions.act_window" id="action_report_marketing_stage">
+        <field name="name">Marketing Stage Report</field>
+        <field name="res_model">report.marketing.stage</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,graph,gantt</field>
+    </record>
+
+ <!--                                 Line Report              -->
+		<record id="view_report_marketing_line_filter" model="ir.ui.view">
+            <field name="name">Report marketing Line</field>
+            <field name="model">report.marketing.stage.line</field>
+            <field name="arch" type="xml">
+                <search string="Filters">
+                    <filter icon="terp-accessories-archiver" string="Active" domain="[('active','=',True)]" name="Actived" help="Actived"/>
+                    <!--filter icon="terp-accessories-archiver" string="Sold" domain="[('state','=',"sold")]" name="Sold" help="Product Sold"/-->
+                    <!--filter icon="terp-accessories-archiver" string="Website" domain="[('state','=',"website")]" name="Website" help="Product Sold"/-->
+                    	<field name="sku"/>
+                		<field name="sku_id"/>
+                		<field name="product_type"/>
+                		<field name="product_category"/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Program" name="program_id" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'program_id'}"/>
+                        <filter string="Stage" name ="stage_id" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'line_master'}"/>
+                        <filter string="Product Type" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'product_type'}"/>
+                        <filter string="State" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/>
+                        <filter string="Product Categories" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'product_category'}"/>
+                        <filter string="Sold Date" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'sold_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+  <!--Marketing Report Line Tree View-->
+    <record model="ir.ui.view" id="view_report_marketing_line_tree">
+        <field name="name">Marketing Report Line</field>
+        <field name="model">report.marketing.stage.line</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Products">
+                <field name="product_id"/>
+                <field name="sku"/>
+                <field name="sku_id"/>
+                <field name="product_type"/>
+                <field name="product_category"/>
+                <field name="product_quantity" sum="Total Quantity"/>
+                <field name="regular_price" sum="Total Cost"/>
+                <field name="sale_off_price" sum="Total sale off" />
+                <field name="percent" sum="Total Percent" />
+                <field name="currency"/>
+                <field name="state"/>
+                <field name="sold_date"/>
+                <field name="program_id"/>
+            	<field name="line_master"/>
+            	<field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+ <!-- Marketing Line form view -->
+  <record id="view_marketing_line_form" model="ir.ui.view">
+            <field name="name">Marketing Detail Report</field>
+            <field name="model">report.marketing.stage.line</field>
+            <field name="arch" type="xml">
+                <form string="Marketing Lin" version="7.0">
+            		<sheet>
+	            		<div class="oe_title">
+	                    	<label for="name" class="oe_edit_only"/>
+	                        <h1> <field name="product_id" on_change="onchange_product_id(product_id,line_master,context)" /></h1>
+	                    </div>
+	            		<group>
+			            	<group>
+				                <field name="sku"/>
+				                <field name="sku_id"/>
+				                <field name="product_description"/>
+				                <field name="product_type" select="2"/>
+				                <field name="line_master"/>
+				                <field name="company_id" readonly="1"/>
+				            </group>
+				            <group>
+				            	<field name="product_category"/>
+						       	<field name="regular_price"/>
+			                	<field name="sale_off_price" on_change="onchange_sale_off_price(product_id,sale_off_price, context)"/>
+			                	 <field name="percent" />
+			                	<field name="currency" />
+			                	<field name="state"/>
+			                	<field name="sold_date"/>
+	                		</group>
+		                </group>
+		         	</sheet>
+	             <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            	</form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_report_marketing_line_graph">
+        <field name="name">Marketing Report Graph View</field>
+        <field name="model">report.marketing.stage.line</field>
+        <field name="type">graph</field>
+        <field name="arch" type="xml">
+        	<graph string = "Total idea score by Inventor">
+				<field name ="line_master" group="True"/>
+				<field name ="product_quantity" operator="+"/>
+			</graph>
+        </field>
+  </record>
+
+  <!-- stage line Action -->
+ <record model="ir.actions.act_window" id="action_report_marketing_state_line">
+        <field name="name">Marketing Detail Report</field>
+        <field name="res_model">report.marketing.stage.line</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,graph</field>
+    </record>
+
+<!-- Menu Item Manager -->
+	<!-- Loyalty menu -->
+     <menuitem name="Marketing/Report" id="report_marketing" action="action_report_marketing" parent="base.marketing_menu" />
+     <menuitem name="Marketing Campaign" id="menu_report_marketing_item" action="action_report_marketing" parent="report_marketing"/>
+<!-- Menu Item Marketing -->
+	<!--menuitem name="Report/Marketing" id="menu_report_marketing_line_item"  action="action_report_marketing_stage" parent="base.marketing_menu" /-->
+	<menuitem name="Marketing Stage" id="marketing_stage_report_item" parent="report_marketing" action="action_report_marketing_stage"/>
+ 	<menuitem name="Marketing Line" id="menu_marketing_report_line_item" parent="report_marketing" action="action_report_marketing_state_line"/>
+
+<!--                      fiscal year                     -->
+<record id="marketing_year_Report_form" model="ir.ui.view">
+            <field name="name">Marketing Year Report</field>
+            <field name="model">marketing.year.report</field>
+            <field name="arch" type="xml">
+                <form string="Fiscal Year" version="7.0">
+                    <header>
+                    	<button name="action_open" string="Open" states="close,cancel"  groups="base.group_user" type="object"/>
+                    	<button name="action_close" string="Close" states="open" class="oe_highlight" groups="base.group_user" type="object"/>
+                    	<button name="action_cancel" string="Cancel" states="open,close" groups="base.group_user" type="object"/>
+            	 		<field name="state" widget="statusbar" statusbar_visible="open,close,cancel"/>
+            		</header>
+            		<sheet>
+	                   <group>
+	               			<field name="name"/>
+	                   		<field name="year_id"/>
+	            		   	<field name="description"/>
+				            <field name="company"/>
+		                 </group>
+		                 <group col="4">
+			             	<notebook>
+				            	<page string="Report Lines">
+				            	<field name="period_report">
+				            		<tree>
+				            	   		<field name="name"/>
+				            	   		<field name="start_date"/>
+				            	   		<field name="end_date"/>
+				            	   	</tree>
+				            	</field>
+				            </page>
+			              </notebook>
+				       </group>
+					</sheet>
+				<div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            	</form>
+        </field>
+    </record>
+
+<!-- Marketing fiscal year Tree View -->
+    <record model="ir.ui.view" id="marketing_year_Report_tree">
+        <field name="name">Marketing Year Report</field>
+        <field name="model">marketing.year.report</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Marketing Report">
+                <field name="name"/>
+                <field name="year_id"/>
+                <field name="description"/>
+                <field name="company"/>
+            </tree>
+        </field>
+    </record>
+
+<!--Marketing Report View Action -->
+    <record model="ir.actions.act_window" id="action_year_report_view">
+        <field name="name">Fiscal year</field>
+        <field name="res_model">marketing.year.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+<!--                       Marketing period report            -->
+
+<record id="marketing_period_report_form" model="ir.ui.view">
+            <field name="name">Marketing Period Report</field>
+            <field name="model">marketing.year.period</field>
+            <field name="arch" type="xml">
+                <form string="Marketing Mothly Report" version="7.0">
+	            	<sheet>
+	            		<div class="oe_title">
+	                            <label for="name" class="oe_edit_only"/>
+	                            <h1><field name="name"/></h1>
+	                    </div>
+	            		<group>
+			            	<group>
+			            	    <field name="year_master"/>
+				                <field name="start_date"/>
+				                <field name="end_date"/>
+				            </group>
+		                 </group>
+		                	<group col="4">
+			             <notebook>
+				            <page string="Report Lines">
+				            	<field name="line_master_id">
+				            		<tree>
+				            			<field name="name"/>
+				            			<field name="value"/>
+				            			<field name="unit"/>
+				            			<field name="remark"/>
+				            		</tree>
+				            	</field>
+				            </page>
+			              </notebook>
+				       </group>
+					</sheet>
+			    <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            	</form>
+        </field>
+    </record>
+
+<!-- Marketing monthly Tree View -->
+    <record model="ir.ui.view" id="marketing_period_report_tree">
+        <field name="name">Marketing Monthly Report</field>
+        <field name="model">marketing.year.period</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Monthly Report">
+                <field name="year_master"/>
+                <field name="name"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+            </tree>
+        </field>
+    </record>
+
+<!--Marketing Report View Action -->
+    <record model="ir.actions.act_window" id="action_monthly_marketing_Report">
+        <field name="name">Marketing Monthly Report</field>
+        <field name="res_model">marketing.year.period</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+<!--                    Marketing Line Report              -->
+
+<record id="monthly_report_marketing_filter" model="ir.ui.view">
+            <field name="name">Marketing Monthly Report Line</field>
+            <field name="model">marketing.year.period.line</field>
+            <field name="arch" type="xml">
+                <search string="Filters">
+                    <filter icon="terp-accessories-archiver" string="Google Analytic" domain="[('parameter_type','=','Google Analytics')]" name="google_analytics" help="Google Analytics"/>
+                    <!--filter icon="terp-accessories-archiver" string="Website" domain="[('state','=',"website")]" name="Website" help="Product Sold"/-->
+                    <group expand="0" string="Group By...">
+                        <filter string="Year" name="fiscal_year" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'fiscal_year'}"/>
+                        <filter string="Period" name ="type_id" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'line_master'}"/>
+                        <filter string="Type" name ="type_id" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'name'}"/>
+                        <filter string="Report Type" name ="type_id" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'parameter_type'}"/>
+                        <filter string="Categories" name ="type_id" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'parameter_categories'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+  <!--Marketing Report Line Tree View-->
+    <record model="ir.ui.view" id="view_monthly_marketing_line_tree">
+        <field name="name">Marketing Monthly Report Line</field>
+        <field name="model">marketing.year.period.line</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Report Lines">
+            	<field name="fiscal_year"/>
+            	<field name="line_master"/>
+            	<field name="parameter_type"/>
+            	<field name="parameter_categories"   />
+                <field name="name"/>
+                <field name="value"/>
+                <field name="unit"/>
+                <field name="remark"/>
+            </tree>
+        </field>
+    </record>
+
+ <!-- Marketing Line form view -->
+  <record id="view_monthly_marketing_line_form" model="ir.ui.view">
+            <field name="name">Monthly Marketing Detail Report</field>
+            <field name="model">marketing.year.period.line</field>
+            <field name="arch" type="xml">
+                <form string="Marketing Line" version="7.0">
+            		<sheet>
+            			<div class="oe_title">
+	                    	<label for="name" class="oe_edit_only"/>
+	                        <h1><field name="name"/></h1>
+	                   	</div>
+	            		<group>
+			            	<group>
+				                <field name="parameter_type"/>
+				                <field name="parameter_categories"/>
+				           	</group>
+				           	<group>
+				           	 <field name="value"/>
+				           		<field name="unit"/>
+				           	</group>
+				            <notebook colspan="4">
+				            <page string="Remark">
+				            	<field name="remark"/>
+				            </page>
+				            </notebook>
+		                </group>
+		         	</sheet>
+	             <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            	</form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_year_marketing_line_graph">
+        <field name="name">Marketing Report Graph View</field>
+        <field name="model">marketing.year.period.line</field>
+        <field name="type">graph</field>
+        <field name="arch" type="xml">
+        	<graph string = "Total value">
+				<field name ="name"/>
+				<field name ="value" operator="+"/>
+			</graph>
+        </field>
+  </record>
+
+  <!-- stage line Action -->
+ <record model="ir.actions.act_window" id="action_monthly_marketing_state_line">
+        <field name="name">Marketing Detail Report</field>
+        <field name="res_model">marketing.year.period.line</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,graph</field>
+    </record>
+
+ 	 <menuitem name="Marketing/Monthly Report" id="fiscal_year_report" action="action_year_report_view" parent="base.marketing_menu" />
+     <menuitem name="Fiscal Year" id="year_report_marketing_item" action="action_year_report_view" parent="fiscal_year_report" sequence="4"/>
+
+<!--      Parameter type and unit view            -->
+
+<record id="monthly_report_type_form" model="ir.ui.view">
+            <field name="name">Marketing Period Report</field>
+            <field name="model">monthly.report.type</field>
+            <field name="arch" type="xml">
+                <form string="Marketing Mothly Report" version="7.0">
+            		<sheet>
+	            		<group>
+			            	<group>
+			            	    <field name ="name"/>
+			            	    <field name ="description"/>
+				            </group>
+				            <group>
+	            				<field name ="remark"/>
+		                    </group>
+		                </group>
+		        	</sheet>
+            	</form>
+        </field>
+    </record>
+
+<record id="monthly_report_unit_form" model="ir.ui.view">
+            <field name="name">Marketing Unit</field>
+            <field name="model">monthly.report.unit</field>
+            <field name="arch" type="xml">
+                <form string="Marketing Mothly Report" version="7.0">
+	            	<sheet>
+	            		<group>
+			            	<group>
+			            	    <field name ="name"/>
+			            	    <field name ="description"/>
+				            </group>
+				            <group>
+	            				<field name ="remark"/>
+		                    </group>
+		                </group>
+		        	</sheet>
+            	</form>
+        </field>
+    </record>
+
+ <!--                  PRODUCT MANAGEMENT                     -->
+  <record id="product_management_filter" model="ir.ui.view">
+            <field name="name">Productt</field>
+            <field name="model">website.product</field>
+            <field name="arch" type="xml">
+                <search string="Filters">
+                 		<field name="name"/>
+                 		<field name ="style"/>
+			     		<field name ="sku"/>
+			     		<field name ="sku_id"/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Style" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'style'}"/>
+                        <filter string="Product Type" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'product_type'}"/>
+                        <filter string="Product Categories" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'product_category'}" help="Order reference"/>
+                        <filter string="State" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'state'}"/>
+                        <filter string="Certificate" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'diamon_certificate'}"/>
+                        <filter string="Sold Date" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'sold_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+  <record model="ir.ui.view" id="website_product_tree">
+        <field name="name">Products</field>
+        <field name="model">website.product</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Products">
+            	 <field name ="name"/>
+			     <field name ="style"/>
+			     <field name ="sku"/>
+			     <field name ="sku_id"/>
+			     <field name ="product_type"/>
+			     <field name ="product_category"/>
+			      <field name ="diamon_certificate"/>
+			     <field name ="product_description"/>
+				 <field name ="regular_price"/>
+			     <field name ="currency"/>
+			     <field name ="state"/>
+			     <field name ="sold_date"/>
+			     <field name ="customer"/>
+            </tree>
+        </field>
+    </record>
+
+	<record id="website_product_form" model="ir.ui.view">
+            <field name="name">Website Product</field>
+            <field name="model">website.product</field>
+            <field name="arch" type="xml">
+                <form string="Product" version="7.0">
+	            	<sheet>
+	            		<div class="oe_title">
+	                    	<label for="name" class="oe_edit_only"/>
+	                        <h1><field name="name"/></h1>
+	                    </div>
+	            		<group>
+			            	<group>
+			            	    <field name ="style"/>
+			            	    <field name ="sku"/>
+			            	    <field name ="sku_id"/>
+			            	    <field name ="product_type"/>
+			            	    <field name ="diamon_certificate" attrs="{'invisible':[('product_type', '!=', 'diamond')]}" />
+			            	    <field name ="product_category" attrs="{'invisible':[('product_type', '!=', 'jewelry')]}" />
+			            	    <field name ="product_description"/>
+				            </group>
+				            <group>
+			            	    <field name ="regular_price"/>
+			            	    <field name ="currency"/>
+			            	    <field name ="state"/>
+			            	    <field name ="sold_date" attrs="{'invisible':[('state', '!=', 'sold')]}" />
+			            	    <field name ="customer" attrs="{'invisible':[('state', '!=', 'sold')]}"/>
+			            	    <field name ="remark"/>
+		                    </group>
+		                </group>
+		        	</sheet>
+		        	<div class="oe_chatter">
+	                    	<field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+	                </div>
+            	</form>
+        </field>
+    </record>
+
+ <record model="ir.actions.act_window" id="website_product_manager">
+        <field name="name">Products</field>
+        <field name="res_model">website.product</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+<record id="monthly_report_unit_form" model="ir.ui.view">
+            <field name="name">Marketing Report Type</field>
+            <field name="model">monthly.parameter.type</field>
+            <field name="arch" type="xml">
+                <form string="Marketing Mothly Report" version="7.0">
+	            	<sheet>
+	            		<group>
+			            	<group>
+			            	    <field name ="name"/>
+			            	    <field name ="description"/>
+				            </group>
+				            <group>
+	            				<field name ="remark"/>
+		                    </group>
+		                </group>
+		        	</sheet>
+            	</form>
+        </field>
+    </record>
+
+   <record id="monthly_report_categories_form" model="ir.ui.view">
+            <field name="name">Marketing Report Categories</field>
+            <field name="model">parameter.categories</field>
+            <field name="arch" type="xml">
+                <form string="Marketing Mothly Report" version="7.0">
+	            	<sheet>
+	            		<group>
+			            	<group>
+			            	    <field name ="name"/>
+			            	    <field name ="description"/>
+				            </group>
+				            <group>
+	            				<field name ="remark"/>
+		                    </group>
+		                </group>
+		        	</sheet>
+            	</form>
+        </field>
+    </record>
+
+ <!-- Report Marketing program form view -->
+
+ <record id="marketing_program_time_line_gantt" model="ir.ui.view">
+            <field name="name">Marketing Program Time Line</field>
+            <field name="model">marketing.program</field>
+            <field name="arch" type="xml">
+               <gantt string="Marketing Time Line" date_start="date_start" date_stop="date_stop" color="inventor_id">
+					<level object="report.marketing"  link="id" domain="[]">
+						<field name="name"/>
+					</level>
+				</gantt>
+            </field>
+        </record>
+
+	<record id="view_report_marketing_program_form" model="ir.ui.view">
+            <field name="name">Report Marketing</field>
+            <field name="model">marketing.program</field>
+            <field name="arch" type="xml">
+                <form string="Marketing Report" version="7.0">
+            		<header>
+                    	<button name="action_start" string="Submit" states="draft" class="oe_highlight"  groups="base.group_user" type="object"/>
+                    	<button name="action_end" string="Finish" states="inprogress" class="oe_highlight" groups="base.group_user" type="object"/>
+                    	<button name="action_cancel" string="Cancel" states="draft,inprogress" groups="base.group_user" type="object"/>
+                    	<button name="action_new" string="Set to Draft" states="cancel"  groups="base.group_user" type="object"/>
+            	 		<field name="state" widget="statusbar" statusbar_visible="draft,inprogress,done,cancel"/>
+            		</header>
+            		<sheet>
+	            		<div class="oe_title">
+	                    	<label for="name" class="oe_edit_only"/>
+	                        <h1><field name="name"/></h1>
+	                    </div>
+			            	<group>
+				                <field name="year_id"/>
+				                <field name="company"/>
+				                <field name="date_start"/>
+                				<field name="date_stop"/>
+				            </group>
+             					<field name="description"/>
+				    </sheet>
+				    <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+	                </div>
+
+            	</form>
+        </field>
+    </record>
+
+<!--Marketing Program Management Tree View -->
+    <record model="ir.ui.view" id="view_report_marketing_program_tree">
+        <field name="name">Marketing Program Management</field>
+        <field name="model">marketing.program</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Marketing Program Management">
+                <field name="name"/>
+                <field name="year_id"/>
+                <field name="date_start"/>
+                <field name="date_stop"/>
+                <field name="company"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+<!--Search View and filter-->
+		<record id="view_report_marketing_program_filter" model="ir.ui.view">
+            <field name="name">Marketing Program Management</field>
+            <field name="model">marketing.program</field>
+            <field name="arch" type="xml">
+                <search string="Filters">
+                    <filter icon="terp-accessories-archiver" string="Active" domain="[('active','=',True)]" name="Actived" help="Actived"/>
+                    <field name="name"/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Company" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'company'}"/>
+                        <filter string="Year" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'year_id'}"/>
+                        <filter string="Start Date" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'start_date'}" help="Order reference"/>
+                        <filter string="End Date" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'end_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+<!--Marketing Report View Action -->
+    <record model="ir.actions.act_window" id="view_report_marketing_program">
+        <field name="name">Marketing Program Management</field>
+        <field name="res_model">marketing.program</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,gantt</field>
+    </record>
+
+		<menuitem name="Campaign Time Line" id="marketing_campaign_time_line_item" action="view_report_marketing_program" parent="base.marketing_menu"/>
+		<menuitem name="Marketing Time Line" id="marketing_time_line_item" action="view_report_marketing_program" parent="marketing_campaign_time_line_item"/>
+ 		<menuitem name="Monthly Report" id="monthly_report_marketing_item" action="action_monthly_marketing_Report" parent="fiscal_year_report" sequence ="2"/>
+     	<menuitem name="Monthly Report Line" id="monthly_report_line_marketing_item" action="action_monthly_marketing_state_line" parent="fiscal_year_report" sequence="3"/>
+		<menuitem name="Products" id="product_manager_item" action="website_product_manager" parent="base.marketing_menu" sequence="10"/>
+		<menuitem name="Products" id="website_product_item" action="website_product_manager" parent="product_manager_item" />
+
+	</data>
+</openerp>
+
+

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>		
+        
+		<record model="ir.ui.view" id="hpusa_view_move_form">
+            <field name="name">hp.stock.move.form</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_form" />
+            <field name="priority">16</field>
+            <field name="arch" type="xml">
+            	 <field name="name" position="before">
+            	 	<label for="weight_mo"/>
+                    <div>
+	            	 	<field name="weight_mo" class="oe_inline"/>
+	                    <field name="weight_mo_unit" groups="product.group_uom" class="oe_inline"/>
+                    </div>
+            	 </field>
+            	 <group string="Traceability"
+                            groups="stock.group_tracking_lot" position="after">
+            	 	 <field name="note" placeholder="Add an note..." class="oe_inline" nolabel="1"/>
+            	 </group>
+            </field>
+        </record>
+        
+        <record id="hp_view_stock_move_consume_wizard" model="ir.ui.view">
+            <field name="name">Consume Move</field>
+            <field name="model">stock.move.consume</field>
+            <field name="inherit_id" ref="stock.view_stock_move_consume_wizard"/>
+            <field name="arch" type="xml">
+            	 <field name="location_id" groups="stock.group_locations" position="before">
+            	 	<label for="weight_mo"/>
+                    <div>
+                        <field name="weight_mo" class="oe_inline"/>
+                        <field name="weight_mo_unit" class="oe_inline" groups="product.group_uom"/>
+                    </div>
+            	 </field>
+            </field>
+        </record>
+        
+        <record id="hp_view_stock_move_scrap_wizard" model="ir.ui.view">
+            <field name="name">Scrap Move</field>
+            <field name="model">stock.move.scrap</field>
+            <field name="inherit_id" ref="stock.view_stock_move_scrap_wizard"/>
+            <field name="arch" type="xml">
+            	<field name="location_id" string="Scrap Location" widget="selection"
+                            domain="[('usage','!=','view'),('scrap_location','=',True)]" groups="stock.group_locations" position="before">
+                    <label for="weight_mo"/>
+                    <div>
+                        <field name="weight_mo" class="oe_inline"/>
+                        <field name="weight_mo_unit" class="oe_inline" groups="product.group_uom"/>
+                    </div> 
+                </field>
+            </field>            
+        </record>
+        
+        <record id="hp_view_picking_form" model="ir.ui.view">
+            <field name="name">HP.stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+            	 <field name="partner_id" on_change="onchange_partner_in(partner_id)" position="before">
+            	 	<field name="shipper"/>
+            	 	<field name="receiver"/>
+            	 </field>
+            	 <field name="stock_journal_id" widget="selection" groups="account.group_account_user" position="after">
+            	 	<field name="hp_transfer_type"/>
+            	 </field>
+            </field>
+        </record>
+        
+        <record id="hp_view_picking_out_form" model="ir.ui.view">
+            <field name="name">HP.stock.picking.form</field>
+            <field name="model">stock.picking.out</field>
+            <field name="inherit_id" ref="stock.view_picking_out_form"/>
+            <field name="arch" type="xml">
+            	 <field name="partner_id" on_change="onchange_partner_in(partner_id)" string="Customer" domain="[('customer','=',True)]" position="before">
+            	 	<field name="shipper"/>
+            	 </field>
+            </field>
+        </record>
+        
+        <record id="hp_view_picking_in_form" model="ir.ui.view">
+            <field name="name">HP.stock.picking.form</field>
+            <field name="model">stock.picking.in</field>
+            <field name="inherit_id" ref="stock.view_picking_in_form"/>
+            <field name="arch" type="xml">
+            	 <field name="partner_id" on_change="onchange_partner_in(partner_id)" string="Supplier" domain="[('supplier','=',True)]"  position="before">
+            	 	<field name="receiver"/>
+            	 </field>
+            </field>
+        </record>
+        
+	</data>
+</openerp>

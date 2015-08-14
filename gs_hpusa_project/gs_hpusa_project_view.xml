@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>	
+	<record id="gs_view_task_tree2" model="ir.ui.view">
+            <field name="name">gs.project.task.tree</field>
+            <field name="model">project.task</field>
+            <field eval="1" name="priority"/>
+            <field name="inherit_id" ref="project.view_task_tree2"/>
+            <field name="arch" type="xml">
+	    	<field name="name" position="before" version="7.0">
+                	<field name="sequence"/>
+              </field>		
+		<field name="date_end" position="after" version="7.0">
+                	<field name="date_deadline"/>                     
+              </field>
+		<field name="user_id" position="after" version="7.0">
+                	<field name="priority"/>
+              </field> 
+              <!--
+              <field name="categ_ids" position="replace" version="7.0">
+                	<field name="tags_id"/>
+              </field>
+              -->           
+		<field name="user_id" position="before" version="7.0">
+                     <field name="schedule_id"/>
+                	<field name="phase_name"/>                     
+                     <field name="assignedby_id"/>                     
+                     <field name="reportto_ids"/>
+                     <field name="involvestaff_ids"/>
+              </field>
+		<field name="date_start" position="replace" version="7.0">
+			<field name="date_start" />	
+		</field>
+              <field name="date_end" position="replace" version="7.0">
+			<field name="date_end" />
+		</field>             		
+	     </field>
+	</record>
+
+	<record id="gs_view_task_form2" model="ir.ui.view">
+            <field name="name">gs.project.task.form</field>
+            <field name="model">project.task</field>
+            <field eval="2" name="priority"/>
+	     <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">            	    	
+		<field name="user_id" position="before" version="7.0">
+                	<field name="assignedby_id"/>                     
+              </field>
+              <!--
+              <field name="categ_ids" position="replace" version="7.0">
+                	<field name="tags_id"/>
+              </field>
+             -->
+              <field name="user_id" position="after" version="7.0">                	
+                     <field name="schedule_id"/>
+                     <field name="directory_id"/>                      
+              </field>
+		<field name="progress" position="after" version="7.0">
+                	<field name="reportto_ids" widget="many2many_tags"/>
+			<field name="involvestaff_ids" widget="many2many_tags"/>
+              </field>			
+              
+	     </field>
+	</record>	
+
+	 <record id="gs_edit_project" model="ir.ui.view">
+            <field name="name">gs.project.project.form</field>
+            <field name="model">project.project</field>
+	     <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+		<field name="user_id" position="after" version="7.0">
+			<field name="involvestaff_ids" widget="many2many_tags"/>
+              </field>
+		<field name="partner_id" position="after" version="7.0">
+			<field name="company_id"/>
+              </field>
+              <xpath expr="/form/sheet/notebook/page[@name='project_stages']" position="after">
+                     <page string="Project Schedule" attrs="{'invisible': [('use_tasks', '=', False)]}" name="project_schedule">
+                            <field name="schedule_ids"/>
+                     </page>
+            	</xpath>  
+	     </field>
+	</record>     
+	
+	<record id="gs_view_attachment_form" model="ir.ui.view">
+            <field name="model">ir.attachment</field>
+            <field name="inherit_id" ref="base.view_attachment_form"/>
+            <field name="arch" type="xml">
+              <field name="res_model" position="before" version="7.0">
+            		<field name="project_id" invisible="1"/>
+			<field name="task_id" invisible="1"/>
+                     <field name="res_partner_id" invisible="1"/>
+                     <field name="crm_id" invisible="1"/> 
+              </field>
+		<field name="user_id" position="before" version="7.0">
+            		<field name="assignedby_ids" widget="many2many_tags" readonly= "True" />
+              </field>
+		<field name="user_id" position="after" version="7.0">
+            		<field name="involvestaff_ids" widget="many2many_tags"/>
+              </field>		
+            </field>
+   	</record>
+
+	 <record model="ir.ui.view" id="gs_view_document_file_form">
+        	<field name="name">gs1.ir.attachment</field>
+        	<field name="model">ir.attachment</field>
+	       <field name="priority" eval="1"/>
+	       <field name="inherit_id" ref="document.view_document_file_form"/>
+	       <field name="arch" type="xml">
+		<field name="parent_id" position="replace" version="7.0">
+            		<field name="write_date" invisible="1"/>
+              </field>
+		<field name="datas" position="after" version="7.0">
+            		<field name="parent_id" on_change="onchange_directory(parent_id)"/>
+              </field>
+		</field>
+   	</record>
+
+
+	<record model="ir.ui.view" id="gs_view_document_directory_form">
+            <field name="name">gs.document.directory</field>
+            <field name="model">document.directory</field>
+	     <field name="inherit_id" ref="document.view_document_directory_form"/>			
+            <field name="arch" type="xml">            
+	     <field name="user_id" position="after" version="7.0">                     
+			<field name="ownermanager_ids" widget="many2many_tags"/>
+            		<field name="involvestaff_ids" widget="many2many_tags"/>
+            </field>
+	     </field>
+   	</record>
+
+       <record id="document_page.view_wiki_filter" model="ir.ui.view">
+            <field name="name">document.page.search</field>
+            <field name="model">document.page</field>
+            <field name="arch" type="xml">
+                <search string="Document Page">
+                    <field name="name" string="Content" filter_domain="['|', ('name','ilike',self), ('content','ilike',self)]"/>
+                    <field name="write_uid"/>
+                    <field name="parent_id"/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Page Type" domain="[('type','=','content')]" context="{'group_by':'parent_id'}"/>
+                        <filter string="Categories Type" domain="[('type','=','category')]" context="{'group_by':'parent_id'}"/>
+                        <filter string="Author" domain="[]" context="{'group_by':'create_uid'}"/>
+                        <filter string="Last Contributor" domain="[]" context="{'group_by':'write_uid'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+	<record id="gs_view_wiki_form" model="ir.ui.view">
+            <field name="name">gs.document.page.form</field>
+            <field name="model">document.page</field>
+	     <field name="inherit_id" ref="document_page.view_wiki_form"/>
+            <field name="arch" type="xml">
+            <field name="parent_id" position="replace" version="7.0">
+                     <field name="parent_id" on_change="onchange_document_page(parent_id)"/>
+            </field>
+	     <field name="parent_id" position="after" version="7.0">
+			<field name="user_id"/>
+			<field name="ownermanager_ids" widget="many2many_tags" groups="gs_hpusa_project.group_ownermanager"/>
+            		<field name="involvestaff_ids" widget="many2many_tags"/>
+                     <field name="directory_id"/>
+			<field name="company_id"/>
+            </field>          	     
+	     </field>
+   	</record>
+	
+	<record id="gs_view_task_search_form" model="ir.ui.view">
+            <field name="name">gs1.project.task.search.form</field>
+            <field name="model">project.task</field>
+	     <field name="inherit_id" ref="project.view_task_search_form"/>
+            <field name="arch" type="xml">            
+            	  <search string="Tasks" position="replace">
+		      <search string="Tasks">
+                    <field name="name" string="Tasks"/>
+                    <field name="categ_ids"/>
+                    <separator/>
+                    <filter icon="terp-mail-message-new" string="Unread Messages" name="message_unread" domain="[('message_unread','=',True)]"/>
+                    <separator/>
+                    <filter name="draft" string="New" domain="[('state','=','draft')]" help="New Tasks" icon="terp-check"/>
+                    <filter name="open" string="In Progress" domain="[('state','=','open')]" help="In Progress Tasks" icon="terp-camera_test"/>
+                    <filter string="Pending" domain="[('state','=','pending')]" context="{'show_delegated':False}" help="Pending Tasks" icon="terp-gtk-media-pause"/>
+                    <separator/>
+                    <filter name="My project" string="Project" domain="[('project_id.user_id','=',uid)]" help="My Projects" icon="terp-check"/>
+                    <separator/>
+                    <filter string="My Tasks" domain="[('user_id','=',uid)]"  help="My Tasks" icon="terp-personal"/>
+                    <filter string="Unassigned Tasks" domain="[('user_id','=',False)]"  help="Unassigned Tasks" icon="terp-personal-"/>
+                    <separator/>
+                    <filter string="Deadlines" context="{'deadline_visible': False}" domain="[('date_deadline','&lt;&gt;',False)]"
+                        help="Show only tasks having a deadline" icon="terp-gnome-cpu-frequency-applet+"/>                    
+                    <field name="project_id"/>
+                    <field name="user_id"/>              
+                    <field name="assignedby_id"/>                      
+                    <field name="phase_name"/>
+                    <field name="reportto_ids"/>
+                    <field name="involvestaff_ids"/>
+                    <field name="schedule_id" domain="[]"/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Users" name="group_user_id" icon="terp-personal" domain="[]"  context="{'group_by':'user_id'}"/>
+                        <filter string="Project" name="group_project_id" icon="terp-folder-violet" domain="[]" context="{'group_by':'project_id'}"/>
+                        <filter string="Stage" name="group_stage_id" icon="terp-stage" domain="[]" context="{'group_by':'stage_id'}"/>
+                        <filter string="Deadline" icon="terp-gnome-cpu-frequency-applet+" domain="[]" context="{'group_by':'date_deadline'}"/>
+                        <filter string="Start Date" icon="terp-go-month" domain="[]" context="{'group_by':'date_start'}" groups="base.group_no_one"/>
+                        <filter string="End Date" icon="terp-go-month" domain="[]" context="{'group_by':'date_end'}" groups="base.group_no_one"/>
+                        <filter string="Assigned By" domain="[]" context="{'group_by':'assignedby_id'}"/>
+                        <filter string="Project Phase" name="group_project_id_phase" icon="terp-folder-violet" domain="[]" context="{'group_by':'phase_id'}"/>
+                        <filter string="Task Phase" domain="[]" context="{'group_by':'phase_name'}"/>
+                        <filter string="Task Schedule" domain="[]" context="{'group_by':'schedule_id'}"/> 
+                        <filter string="Company" context="{'group_by': 'company_id'}"/> 
+                        <!--filter string="Tags" context="{'group_by': 'tags_id'}"/-->
+                    </group>
+                    </search>
+                </search>
+	     </field>
+   	</record>
+
+       <record id="task_schedule_search" model="ir.ui.view">
+            <field name="name">project.task.schedule.search</field>
+            <field name="model">project.task.schedule</field>
+            <field name="arch" type="xml">
+                <search string="Tasks Schedule">
+                   <field name="name" string="Tasks Schedule"/>
+                   <filter icon="terp-check" string="Common" name="common" domain="[('case_default', '=', 1)]" help="Schedule common to all projects"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="task_schedule_edit" model="ir.ui.view">
+            <field name="name">project.task.schedule.form</field>
+            <field name="model">project.task.schedule</field>
+            <field name="arch" type="xml">
+                <form string="Task Schedule" version="7.0">
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="case_default"/>
+                        </group>
+                        <group>
+                            <field name="state"/>
+                            <field name="sequence"/>
+                            <field name="fold"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Add a description..."/>
+                </form>
+            </field>
+        </record>
+
+        <record id="task_schedule_tree" model="ir.ui.view">
+            <field name="name">project.task.schedule.tree</field>
+            <field name="model">project.task.schedule</field>
+            <field name="arch" type="xml">
+                <tree string="Task Schedule">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="open_task_schedule_form" model="ir.actions.act_window">
+            <field name="name">Schedule</field>
+            <field name="res_model">project.task.schedule</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="task_schedule_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add a stage in the task pipeline.
+              </p><p>
+                Define the steps that will be used in the project from the
+                creation of the task, up to the closing of the task or issue.
+                You will use these schedule in order to track the progress in
+                solving a task or an issue.
+              </p>
+            </field>
+        </record>
+
+        <menuitem action="open_task_schedule_form" name="Task Schedule" id="menu_task_schedule_view" parent="base.menu_project_config_project" sequence="3"/>
+ 
+        <record id="gs_view_partner_category_form" model="ir.ui.view">
+            <field name="name">gs.res.partner.category.form</field>
+            <field name="model">res.partner.category</field>
+	     <field name="inherit_id" ref="base.view_partner_category_form"/>
+            <field name="arch" type="xml">
+            <field name="parent_id" position="replace" version="7.0">
+                     <field name="parent_id" on_change="onchange_res_partner_category(parent_id)"/>
+            </field>
+	     <field name="parent_id" position="after" version="7.0">
+			<field name="user_id"/>
+			<field name="ownermanager_ids" widget="many2many_tags" groups="gs_hpusa_project.group_ownermanager"/>
+            		<field name="involvestaff_ids" widget="many2many_tags"/>
+			<field name="company_id"/>
+            </field>
+	     </field>
+   	</record>
+
+       <record id="gs_view_partner_category_tree" model="ir.ui.view">
+            <field name="name">gs.res.partner.category.tree</field>
+            <field name="model">res.partner.category</field>
+	     <field name="inherit_id" ref="base.view_partner_category_tree"/>
+            <field name="arch" type="xml">
+	     <field name="name" position="after" version="7.0">
+			<field name="user_id"/>
+                     <field name="parent_id"/>
+			<field name="ownermanager_ids" />
+            		<field name="involvestaff_ids" />
+			<field name="company_id"/>
+            </field>
+	     </field>
+   	</record>
+
+       <record id="gs_view_partner_category_list" model="ir.ui.view">
+            <field name="name">gs.res.partner.category.list</field>
+            <field name="model">res.partner.category</field>
+	     <field name="inherit_id" ref="base.view_partner_category_list"/>
+            <field name="arch" type="xml">
+	     <field name="complete_name" position="after" version="7.0">
+			<field name="user_id"/>
+			<field name="parent_id"/>
+                     <field name="ownermanager_ids" />
+            		<field name="involvestaff_ids" />
+			<field name="company_id"/>
+            </field>
+	     </field>
+   	</record>
+
+
+       <record id="gs_view_partner_category_search" model="ir.ui.view">
+            <field name="name">res.partner.category.search</field>
+            <field name="model">res.partner.category</field>
+            <field name="arch" type="xml">
+                <search string="Partner Tags">
+                     <field name="name" string="Content" filter_domain="['|', ('name','ilike',self), ('content','ilike',self)]"/>
+                     <field name="user_id"/>
+			<field name="ownermanager_ids" />
+            		<field name="involvestaff_ids" />
+			<field name="company_id"/>                    
+                    <group expand="0" string="Group By...">
+                        <filter string="Parent" domain="[]" context="{'group_by':'parent_id'}"/>
+                        <filter string="Owner" domain="[]" context="{'group_by':'user_id'}"/>
+                        <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="gs1_view_partner_form" model="ir.ui.view">
+            <field name="name">gs1.res.partner.form</field>
+            <field name="model">res.partner</field>
+	     <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+            <field name="category_id" position="replace" version="7.0">
+                     <field name="category_id" placeholder="Partner Tags" on_change="onchange_res_partner(category_id)"/> 
+            </field>
+	     <field name="category_id" position="after" version="7.0">
+			<field name="owner_id" placeholder="Owner"/>
+			<field name="ownermanager_ids" widget="many2many_tags" placeholder="Owner Manager" groups="gs_hpusa_project.group_ownermanager"/>
+            		<field name="involvestaff_ids" widget="many2many_tags" placeholder="Involve Staff"/>
+            </field>            
+	     </field>
+   	</record>
+
+      <record id="gs1_view_partner_tree" model="ir.ui.view">
+            <field name="name">gs1.res.partner.tree</field>
+            <field name="model">res.partner</field>
+	     <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+	     <field name="name" position="after" version="7.0">
+			<field name="category_id" />
+                     <field name="owner_id" />
+			<field name="ownermanager_ids" widget="many2many_tags" />
+            		<field name="involvestaff_ids" widget="many2many_tags" />
+                     <field name="company_id"/>
+
+            </field>
+            <field name="user_id" position="replace" version="7.0">
+			<field name="user_id"/>
+            </field>
+	     </field>
+   	</record>
+
+
+
+
+       <record id="gs_view_res_partner_filter" model="ir.ui.view">
+            <field name="name">res.partner.select</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                     <field name="parent_id" position="after" version="7.0">
+                           <field name="category_id" />
+                           <field name="owner_id"/>
+			      <field name="ownermanager_ids" />
+            		      <field name="involvestaff_ids" />
+                           <field name="company_id"/> 
+                     </field>
+                      <filter string="Company" context="{'group_by': 'parent_id'}" position="replace">
+                           <filter string="Company" context="{'group_by': 'company_id'}"/>
+                           <filter string="Partner Tags" context="{'group_by': 'category_id'}"/>  
+                           <filter string="Owner" domain="[]" context="{'group_by':'owner_id'}"/>
+                           <filter string="VipProgram" context="{'group_by': 'vip_program_id'}" />    
+                     </filter>                                          
+            </field>
+        </record>
+
+      
+       <record id="gs_view_employee_form" model="ir.ui.view">
+            <field name="name">gs.hr.employee.form</field>
+            <field name="model">hr.employee</field>
+	     <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+	     <field name="user_id" position="after" version="7.0">                     
+                     <field name="involvestaff_ids" widget="many2many_tags" />                     
+
+            </field>
+	     </field>
+   	</record>
+
+
+       <record id="gs_hr_contract_view_form" model="ir.ui.view">
+            <field name="name">hr.contract.view.form</field>
+            <field name="model">hr.contract</field>
+	     <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+	     <field name="type_id" position="after" version="7.0">
+                     <field name="user_id"/>
+                     <field name="involvestaff_ids" widget="many2many_tags" /> 
+                     <field name="company_id"/>
+
+            </field>
+	     </field>
+   	</record>
+
+       <record id="gs_hr_contract_view_tree" model="ir.ui.view">
+            <field name="name">gs.hr.contract.view.tree</field>
+            <field name="model">hr.contract</field>
+	     <field name="inherit_id" ref="hr_contract.hr_contract_view_tree"/>
+            <field name="arch" type="xml">
+	     <field name="name" position="after" version="7.0">                     
+                     <field name="company_id"/>
+
+            </field>
+	     </field>
+   	</record>
+	 
+       <record id="gs_hr_contract_view_search" model="ir.ui.view">
+            <field name="name">gs.hr.contract.view.search</field>
+            <field name="model">hr.contract</field>
+	     <field name="inherit_id" ref="hr_contract.hr_contract_view_search"/>
+            <field name="arch" type="xml">
+	     <field name="name" position="after" version="7.0">                         
+                           <field name="company_id"/>
+            </field>
+            <filter string="Contract Type" icon="terp-stock_symbol-selection" domain="[]" context="{'group_by':'type_id'}" position="after">
+                           <filter string="Company" context="{'group_by': 'company_id'}"/>  
+            </filter>
+
+	     </field>
+   	</record>
+
+       <record id="gs_view_attendance_form" model="ir.ui.view">
+            <field name="name">gs.hr.attendance.form</field>
+            <field name="model">hr.attendance</field>
+	     <field name="inherit_id" ref="hr_attendance.view_attendance_form"/>
+            <field name="arch" type="xml">
+	     <field name="action_desc" position="after" version="7.0">
+                     <field name="company_id"/>
+
+            </field>
+	     </field>
+   	</record>
+
+      <record id="gs_view_attendance_who" model="ir.ui.view">
+            <field name="name">gs.hr.attendance.tree</field>
+            <field name="model">hr.attendance</field>
+	     <field name="inherit_id" ref="hr_attendance.view_attendance_who"/>
+            <field name="arch" type="xml">
+	     <field name="employee_id" position="after" version="7.0">
+                     <field name="company_id"/>
+
+            </field>
+	     </field>
+   	</record>
+
+       <record id="gs_view_hr_attendance_filter" model="ir.ui.view">
+            <field name="name">gs.view_hr_attendance_filter</field>
+            <field name="model">hr.attendance</field>
+	     <field name="inherit_id" ref="hr_attendance.view_hr_attendance_filter"/>
+            <field name="arch" type="xml">
+	     <field name="employee_id" position="after" version="7.0">                         
+                           <field name="company_id"/>
+            </field>
+            <filter string="Day" icon="terp-go-today" domain="[]" context="{'group_by':'day'}" position="after">
+                           <filter string="Company" context="{'group_by': 'company_id'}"/>  
+            </filter>
+
+	     </field>
+       </record> 
+       
+       <record id="gs_edit_holiday_new" model="ir.ui.view">
+            <field name="name">GS Leave Request</field>
+            <field name="model">hr.holidays</field>
+	     <field name="inherit_id" ref="hr_holidays.edit_holiday_new"/>
+            <field name="arch" type="xml">
+	     <field name="department_id" position="after" version="7.0">
+                     <field name="company_id"/>
+
+            </field>
+	     </field>
+   	</record>
+
+       <record id="gs_view_holiday" model="ir.ui.view">
+            <field name="name">gs.hr.holidays.tree</field>
+            <field name="model">hr.holidays</field>
+	     <field name="inherit_id" ref="hr_holidays.view_holiday"/>
+            <field name="arch" type="xml">
+	     <field name="user_id" position="after" version="7.0">
+                     <field name="company_id"/>
+
+            </field>
+	     </field>
+   	</record>
+   
+        <record id="gs_view_hr_holidays_filter" model="ir.ui.view">
+            <field name="name">gs.hr.holidays.filter</field>
+            <field name="model">hr.holidays</field>
+	     <field name="inherit_id" ref="hr_holidays.view_hr_holidays_filter"/>
+            <field name="arch" type="xml">
+	     <field name="department_id" position="after" version="7.0">                         
+                           <field name="company_id"/>
+            </field>
+            <filter string="Status" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"  position="after">
+                           <filter string="Company" context="{'group_by': 'company_id'}"/>  
+            </filter>
+
+	     </field>
+       </record>
+      
+       <record id="gs_crm_case_form_view_job" model="ir.ui.view">
+            <field name="name">Gs Jobs - Recruitment Form</field> 
+            <field name="model">hr.applicant</field>
+	     <field name="inherit_id" ref="hr_recruitment.crm_case_form_view_job"/>
+            <field name="arch" type="xml">
+	     <field name="department_id" position="after" version="7.0">
+                     <field name="involvestaff_ids" widget="many2many_tags" /> 
+                     <field name="company_id"/>
+
+            </field>
+	     </field>
+   	</record>
+
+       <record id="gs_crm_case_tree_view_job" model="ir.ui.view">
+            <field name="name">Gs Applicants</field>
+            <field name="model">hr.applicant</field>
+	     <field name="inherit_id" ref="hr_recruitment.crm_case_tree_view_job"/>
+            <field name="arch" type="xml">
+	     <field name="user_id" position="after" version="7.0">
+                     <field name="company_id"/>
+            </field>
+	     </field>
+   	</record>
+
+       <record id="gs_view_crm_case_jobs_filter" model="ir.ui.view">
+            <field name="name">Gs Jobs - Recruitment Search</field>
+            <field name="model">hr.applicant</field>
+ 	     <field name="inherit_id" ref="hr_recruitment.view_crm_case_jobs_filter"/>
+            <field name="arch" type="xml">
+	     <field name="user_id" position="after" version="7.0">                         
+                           <field name="company_id"/>
+            </field>
+            <filter string="Creation Date" domain="[]" context="{'group_by':'create_date'}" position="after">
+                           <filter string="Company" context="{'group_by': 'company_id'}"/>  
+            </filter>
+
+	     </field>
+       </record>
+
+       <record id="gs11_hr_timesheet_sheet_tree_simplified" model="ir.ui.view">
+            <field name="name">gs11.hr.timesheet.sheet.tree</field>
+            <field name="model">hr_timesheet_sheet.sheet</field>
+	     <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_tree_simplified"/>
+            <field name="arch" type="xml">
+	     <field name="state" position="after" version="7.0">
+                     <field name="company_id"/>
+            </field>
+	     </field>
+   	</record>
+
+       <record id="gs_view_hr_timesheet_sheet_filter" model="ir.ui.view">
+            <field name="name">gs.hr_timesheet_sheet.sheet.filter</field>
+            <field name="model">hr_timesheet_sheet.sheet</field>
+ 	     <field name="inherit_id" ref="hr_timesheet_sheet.view_hr_timesheet_sheet_filter"/>
+            <field name="arch" type="xml">
+	     <field name="department_id" position="after" version="7.0">                         
+                           <field name="company_id"/>
+            </field>
+            <filter string="Department" icon="terp-personal+" domain="[]" context="{'group_by':'department_id'}"  position="after">
+                           <filter string="Company" context="{'group_by': 'company_id'}"/>  
+            </filter>
+
+	     </field>
+       </record>
+
+        <record id="gs_view_expenses_tree" model="ir.ui.view">
+            <field name="name">gs.hr.expense.expense.tree</field>
+            <field name="model">hr.expense.expense</field>
+	     <field name="inherit_id" ref="hr_expense.view_expenses_tree"/>
+            <field name="arch" type="xml">
+	     <field name="state" position="after" version="7.0">
+                     <field name="company_id"/>
+            </field>
+	     </field>
+   	</record>
+   
+       <record id="gs_view_hr_expense_filter" model="ir.ui.view">
+            <field name="name">gs.hr.expense.expense.filter</field>
+            <field name="model">hr.expense.expense</field>
+ 	     <field name="inherit_id" ref="hr_expense.view_hr_expense_filter"/>
+            <field name="arch" type="xml">
+	     <field name="department_id" position="after" version="7.0">                         
+                           <field name="company_id"/>
+            </field>
+            <filter string="Department" icon="terp-personal+" domain="[]" context="{'group_by':'department_id'}"  position="after">
+                           <filter string="Company" context="{'group_by': 'company_id'}"/>  
+            </filter>
+
+	     </field>
+       </record>
+ 
+        <record id="gs_project_issue_form_view" model="ir.ui.view">
+            <field name="name">Gs Project Issue Tracker Form</field>
+            <field name="model">project.issue</field>
+	     <field name="inherit_id" ref="project_issue.project_issue_form_view"/>
+            <field name="arch" type="xml">
+            <field name="user_id" position="after" version="7.0">
+                	<field name="assignedby_id"/>
+                     <field name="reportto_ids" widget="many2many_tags"/>
+                     <field name="involvestaff_ids" widget="many2many_tags"/> 
+            </field>
+            <field name="priority" position="after" version="7.0">                	
+                     <field name="directory_id"/> 
+            </field>
+            <label for="categ_ids" position="replace" version="7.0">                	
+                     <label for="categ_ids" invisible="1"/> 
+            </label>
+            <field name="categ_ids" position="replace" version="7.0">                	
+                     <field name="categ_ids" invisible="1"/> 
+            </field>	     
+            </field>
+   	</record>
+
+
+       <record id="gs_project_issue_tree_view" model="ir.ui.view">
+            <field name="name">Gs Project Issue Tracker Tree</field>
+            <field name="model">project.issue</field>
+	     <field name="inherit_id" ref="project_issue.project_issue_tree_view"/>
+            <field name="arch" type="xml">
+	     <field name="user_id" position="after" version="7.0">
+			<field name="assignedby_id"/>
+                     <field name="reportto_ids"/>
+                     <field name="involvestaff_ids"/> 
+            </field>            	     
+	     </field>
+   	</record>
+
+
+	<record id="gs_view_project_issue_filter" model="ir.ui.view">
+            <field name="name">Gs Project Issue Tracker Search</field>
+            <field name="model">project.issue</field>
+            <field name="inherit_id" ref="project_issue.view_project_issue_filter"/>
+            <field name="arch" type="xml">
+            <field name="user_id" position="after" version="7.0">
+     			<field name="assignedby_id"/>
+                     <field name="reportto_ids"/>
+                     <field name="involvestaff_ids"/>
+            </field>
+            <filter string="Month" icon="terp-go-month" domain="[]" context="{'group_by':'create_date'}" help="Creation Month"  position="replace">
+                     <filter string="Assigned By" context="{'group_by': 'assignedby_id'}"/>  
+            </filter>            
+            </field>
+        </record>
+
+
+
+</data>
+</openerp>

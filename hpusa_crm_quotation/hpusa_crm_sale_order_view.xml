@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+        <record id="hpusa_crm_sale_order_form" model="ir.ui.view">
+            <field name="name">hpusa.crm.opportunities.customer</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+            <field name="arch" type="xml">
+                 <xpath expr="/form/sheet/div/button[@name='action_makeMeeting']" position="after">
+                 	<button name="action_view_so" string="Quotations and Sales" type="object" groups="base.group_user"/>
+				 </xpath>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="hpusa_crm_open_so">
+            <field name="context">{'default_partner_id': active_id, 'search_default_partner_id': active_id, 'group_by':None}</field>
+            <field name="name">Sale Orders</field>
+             <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+            <field name="res_model">sale.order</field>
+        </record>
+
+	</data>
+</openerp>

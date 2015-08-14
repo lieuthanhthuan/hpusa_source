@@ -1,0 +1,3 @@
+import hp_mrp
+import hp_product
+import hp_stock_picking

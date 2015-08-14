@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		<record model="ir.ui.view" id="hpusa_hr_employee_form_view">
+            <field name="name">Employee</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form" />
+            <field name="arch" type="xml">
+	        	<field name="address_home_id" position="replace">
+	            	<field name="home_address" />
+	            	<field name="emegency_contact" />
+	            </field>
+	            <field name="coach_id" position="after">
+	            	<field name="groups_id_many" widget="many2many_tags"/>
+	            </field>
+	            <field name="notes" position="replace">
+		            <div class="oe_edit_only" >
+	                        <label for="content" string="Orther Information"/>
+	                        that will be used as a Job description.
+	                </div>
+	                <field name="content" placeholder="e.g. Once upon a time..." class="oe_edit_only" widget="html"/>
+	                <div class="oe_document_page">
+	                	<field name="display_content" widget="html" class="oe_view_only" options='{"safe": True}'/>
+	                </div>
+                 </field>
+
+	            <xpath expr="//sheet" position="after">
+                    <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+	                </div>
+        		</xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="hpusa_hr_department_form_view">
+            <field name="name">Department</field>
+            <field name="model">hr.department</field>
+            <field name="inherit_id" ref="hr.view_department_form" />
+            <field name="arch" type="xml">
+	        	<field name="manager_id" position="after">
+	            	<field name="ownermanager_ids" widget="many2many_tags"/>
+	            </field>
+            </field>
+        </record>
+	</data>
+</openerp>

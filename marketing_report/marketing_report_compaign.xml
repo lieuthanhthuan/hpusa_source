@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <report auto="False" id="report_marketing_compaign" model="report.marketing" name="report.marketing"
+                rml="marketing_report/marketing_report_compaign.rml" string="Marketing Report Compaign"
+                />
+
+    </data>
+</openerp>

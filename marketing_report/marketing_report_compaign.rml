@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<document filename="Marketing Report.pdf">
+  <template title="Marketing Report">
+    <pageTemplate id="first">
+      <frame id="first" x1="15.0" y1="42.0" width="539" height="758"/>
+    </pageTemplate>
+  </template>
+  <story>
+	<para> abcd </para>
+  </story>
+</document>

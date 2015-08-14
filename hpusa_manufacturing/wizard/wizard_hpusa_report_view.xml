@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="wizard_hpusa_report" model="ir.ui.view">
+            <field name="name">wizard.hpusa.report</field>
+            <field name="model">wizard.hpusa.report</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Report" version="7.0">
+	                <group>
+	                	<field name="date_from" colspan="2"/>
+	                	<field name="date_to" colspan="2"/>
+                                <field name="so_id" colspan="2" widget="many2many_tags"/>
+	                </group>    
+                <footer>
+                      <button name="action_print" string="Print" type="object" class="oe_highlight"/>
+                      or
+                      <button string="Cancel" class="oe_link" special="cancel" />
+                  </footer>
+                </form>
+            </field>
+        </record>
+        
+        
+        
+        <!-- <record id="action_wizard_hpusa_manufacturing_summary_report" model="ir.actions.act_window">
+            <field name="name">Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.hpusa.report</field>
+            <field name="context">{'type_': 'manufacturing_summary'}</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem id="menu_action_wizard_hpusa_manufacturing_summary_report" name="Manufacturing Summary" parent="hpusa_report" action="action_wizard_hpusa_manufacturing_summary_report"  sequence="2"/> -->
+        
+        <record id="action_wizard_hpusa_manufacturing_detail_report" model="ir.actions.act_window">
+            <field name="name">Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.hpusa.report</field>
+            <field name="context">{'type_': 'manufacturing_detail'}</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem id="menu_action_wizard_hpusa_manufacturing_detail_report" name="Manufacturing Detail" parent="hpusa_report" action="action_wizard_hpusa_manufacturing_detail_report"  sequence="2"/>
+        
+        
+        <record id="action_wizard_hpusa_material_repair_summary_report" model="ir.actions.act_window">
+            <field name="name">Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.hpusa.report</field>
+            <field name="context">{'type_': 'material_repair_summary'}</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem id="menu_action_wizard_hpusa_material_repair_summary_report" name="Material Repair Summary" parent="hpusa_report" action="action_wizard_hpusa_material_repair_summary_report"  sequence="3"/>
+        
+        
+        <record id="action_wizard_hpusa_manufacturing_invoice_report" model="ir.actions.act_window">
+            <field name="name">Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.hpusa.report</field>
+            <field name="context">{'type_': 'v_invoice'}</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem id="menu_action_wizard_hpusa_manufacturing_invoice_report" name="V-Invoice" parent="hpusa_report" action="action_wizard_hpusa_manufacturing_invoice_report"  sequence="1"/>
+        
+        <!-- <record id="action_wizard_hpusa_material_produce_summary_report" model="ir.actions.act_window">
+            <field name="name">Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.hpusa.report</field>
+            <field name="context">{'type_': 'material_produce_summary'}</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem id="menu_action_wizard_h -->pusa_material_produce_summary_report" name="Materail Produce Summary" parent="hpusa_report" action="action_wizard_hpusa_material_produce_summary_report"  sequence="5"/>
+    </data>
+</openerp>

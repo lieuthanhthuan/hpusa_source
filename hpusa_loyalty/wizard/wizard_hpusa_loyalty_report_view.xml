@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_wizard_hpusa_loyalty_report" model="ir.ui.view">
+            <field name="name">wizard.hpusa.loyalty.report.wizard</field>
+            <field name="model">wizard.hpusa.loyalty.report</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Report" version="7.0">
+	                <group col="3">
+	                	<field name="option" colspan="2"/>
+	                </group>    
+                <footer>
+                      <button name="action_process" string="Process" type="object" class="oe_highlight"/>
+                      or
+                      <button string="Cancel" class="oe_link" special="cancel" />
+                  </footer>
+                </form>
+            </field>
+        </record>
+        <record id="action_view_wizard_hpusa_loyalty_report" model="ir.actions.act_window">
+            <field name="name">Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.hpusa.loyalty.report</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+<menuitem id="menu_action_view_wizard_hpusa_loyalty_report" name="Loyalty Report" parent="parrent_loyalty" action="action_view_wizard_hpusa_loyalty_report"  sequence="6"/>
+    </data>
+</openerp>

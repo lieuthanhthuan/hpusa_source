@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>		
+		<record id="hpusa_groups_tree" model="ir.ui.view">
+	         <field name="name">hpusa.groups.tree</field>
+	         <field name="model">hpusa.groups</field>
+	         <field name="type">tree</field>
+	         <field name="arch" type="xml">
+	                <tree string="Groups">
+	                	<field name="name" />
+	                	<field name="team_leader" />
+	                </tree>
+	        </field>
+		</record>
+
+		<record id="hpusa_groups_form" model="ir.ui.view">
+	         <field name="name">hpusa.groups.form</field>
+	         <field name="model">hpusa.groups</field>
+	         <field name="type">form</field>
+	         <field name="arch" type="xml">
+	                <form string="Groups"  version="7.0">
+	                	<sheet>
+		                	<group col="4">
+			                	<field name="name" colspan="2"/>
+			                	<field name="team_leader" colspan="2"/>
+		                	</group>
+		                	<notebook>
+			                	<page string="Groups">
+				                	<field name="group_ids" colspan="4" nolabel="1"/>
+				                </page>
+			                </notebook>
+	                	</sheet>
+	                </form>
+	        </field>
+		</record>       
+		
+		<record id="action_hpusa_groups" model="ir.actions.act_window">
+			<field name="name">Groups</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hpusa.groups</field>
+			<field name="view_id" ref="hpusa_groups_tree"/>	
+		</record>		
+		
+		<menuitem action="action_hpusa_groups" id="menu_action_hpusa_groups" name="Groups" parent="gs_hpusa_crm.hpusa_contact2" sequence="5"/>
+		
+		
+		<record id="hpusa_groups_view_order_form" model="ir.ui.view">
+            <field name="name">hpusa.groups.sale.order.form</field>
+            <field name="model">sale.order</field>
+	        <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+            	<field name="user_id" position="before">
+            		<field name="groups_id_many" widget="many2many_tags"/>
+            	</field>
+            </field>
+             
+       </record>
+       
+       <record id="hpusa_groups_view_order_form" model="ir.ui.view">
+            <field name="name">hpusa.groups.sale.order.form</field>
+            <field name="model">sale.order</field>
+	        <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+            	<field name="user_id" position="before">
+            		<field name="groups_id_many" widget="many2many_tags"/>
+            	</field>
+            </field>
+       </record>
+       
+       
+       <record id="hpusa_crm_case_form_view_oppor" model="ir.ui.view">
+            <field name="name">crm.lead.form</field>
+            <field name="model">crm.lead</field>
+			<field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+            <field name="arch" type="xml">
+				<field name="user_id" position="before">
+            		<field name="groups_id_many" widget="many2many_tags"/>
+            	</field>            	     
+	     </field>
+   	</record>
+   	
+   	<record id="hpusa_crm_case_form_view_leads" model="ir.ui.view">
+            <field name="name">HPUSA CRM - Leads Form</field>
+			<field name="model">crm.lead</field>
+			<field name="inherit_id" ref="crm.crm_case_form_view_leads"/>
+            <field name="arch" type="xml">         	     
+				<field name="user_id" position="before">
+            		<field name="groups_id_many" widget="many2many_tags"/>
+            	</field>          	     
+	     </field>
+   	</record>
+   	 
+   	 
+   	<record id="hpusa_view_task_form2" model="ir.ui.view">
+            <field name="name">hpusa.project.task.form</field>
+            <field name="model">project.task</field>
+            <field eval="2" name="priority"/>
+	     	<field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">            	    	
+				<field name="user_id" position="before" version="7.0">
+                	<field name="groups_id_many" widget="many2many_tags"/>                    
+                </field>
+	     </field>
+	</record>	
+	
+	<record id="hpusa_edit_project" model="ir.ui.view">
+          <field name="name">hpusa.project.project.form</field>
+          <field name="model">project.project</field>
+	      <field name="inherit_id" ref="project.edit_project"/>
+          <field name="arch" type="xml">
+			  <field name="user_id" position="after" version="7.0">
+				  <field name="groups_id_many" widget="many2many_tags"/>
+	          </field>		
+	     </field>
+	</record>     
+      
+     <record id="hpusa_group_mrp_production_form_view" model="ir.ui.view">
+            <field name="name">hp_groups.mrp.production.form</field>
+            <field name="model">mrp.production</field>
+            <field name="priority">17</field>
+            <field name="inherit_id" ref="hpusa_manufacturing.hp_mrp_production_form_view"/>
+            <field name="arch" type="xml">
+            	 <field name="origin" position="after">
+            	 	<field name="groups_id_many" widget="many2many_tags"/>   
+            	 </field>
+            </field>
+      </record>
+
+<!--Hungphat USA Configure 13-05-2015 -->
+	 <record id="hpusa_group_project_issue_form_view" model="ir.ui.view">
+            <field name="name">hp_groups.projet.issue.form</field>
+            <field name="model">project.issue</field>
+            <field name="priority">17</field>
+            <field name="inherit_id" ref="project_issue.project_issue_form_view"/>
+            <field name="arch" type="xml">
+            	   <field name="user_id" position="after">
+            	 	<field name="groups_id_many" widget="many2many_tags"/>
+            	 </field>
+            </field>
+      </record>
+	   
+	</data>
+</openerp>

@@ -1,0 +1,732 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>		
+		<menuitem id="loyalty" name="Loyalty" sequence="11"/>
+		<menuitem id="parrent_loyalty" parent="loyalty" name="Loyalty"/>
+		<record model="ir.ui.view" id="loyalty_board_my_dash_view">
+            <field name="name">My Dashboard</field>
+            <field name="model">board.board</field>
+            <field name="arch" type="xml">
+                <form string="Loyalty Dashboard" version="7.0">
+                    <board style="2-1">
+                        <column>
+                        </column>
+                    </board>
+                </form>
+            </field>
+        </record>
+
+        <!--My Dashboard Action-->
+        <record model="ir.actions.act_window" id="loyalty_open_board_my_dash_action">
+            <field name="name">Loyalty Dashboard</field>
+            <field name="res_model">board.board</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="usage">menu</field>
+            <field name="view_id" ref="loyalty_board_my_dash_view"/>
+            <field name="help" type="html">
+              <div class="oe_empty_custom_dashboard">
+                  <p>
+                    <b>Your personal dashboard is empty.</b>
+                  </p><p>
+                    To add your first report into this dashboard, go to any
+                    menu, switch to list or graph view, and click <i>'Add to
+                    Dashboard'</i> in the extended search options.
+                  </p><p>
+                    You can filter and group data before inserting into the
+                    dashboard using the search options.
+                  </p>
+              </div>
+            </field>
+        </record> 
+
+        <!--My Dashboard Menu-->
+        <menuitem 
+            id="loyalty_menu_board_my_dash"
+            parent="parrent_loyalty"
+            action="loyalty_open_board_my_dash_action"
+            sequence="0"/>	
+
+		<record id="view_hpusa_loyalt_conditions_tree" model="ir.ui.view">
+	         <field name="name">hpusa.loyalty.conditions.tree</field>
+	         <field name="model">hpusa.loyalty.conditions</field>
+	         <field name="type">tree</field>
+	         <field name="arch" type="xml">
+	                <tree string="Conditions">
+	                	<field name="name" />
+	                	<field name="start_date" />
+	                	<field name="end_date" />
+                		<field name="obj" />
+                		<field name="type" />
+                		<field name="logic" invisible="1"/>
+	                </tree>
+	        </field>
+		</record>
+
+			        
+		<record id="view_view_hpusa_loyalt_conditions_form" model="ir.ui.view">
+	         <field name="name">hpusa.loyalty.conditions.form</field>
+	         <field name="model">hpusa.loyalty.conditions</field>
+	         <field name="type">form</field>
+	         <field name="arch" type="xml">
+                <form string="Conditions">
+                	<group col="4">
+                		<group col="2" colspan="2">
+	                		<field name="name" colspan="2"/>
+	                		<field name="obj" colspan="2"/>
+	                		<field name="shop_id" colspan="2" attrs="{'required': [('obj', '=','shop')],'invisible': [('obj', '!=','shop')]}"/>
+                			<field name="location_id" colspan="2" attrs="{'required': [('obj', '=','location')], 'invisible': [('obj', '!=','location')]}"/>
+                			<field name="cate_prod_id" colspan="2" attrs="{'required': [('obj', '=','cate_prod')], 'invisible': [('obj', '!=','cate_prod')]}"/>
+                		</group>
+                		<group col="2" colspan="2">
+	                		<field name="type" colspan="2"/>
+	                		<field name="logic" colspan="2" invisible="1"/>
+	                		<field name="start_date" colspan="2"/>
+	                		<field name="end_date" colspan="2"/>
+                		</group>
+                	</group>
+                	<newline/>
+                	<group col="4">
+	                	<field name="lines" nolabel="1">
+	                		<tree editable="bottom">
+	                		    <field name="choose"/>
+	                			<field name="from_value"/>
+	                			<field name="to_value"/>
+	                			<field name="logic" invisible="1"/>
+	                			<field name="formula"/>
+	                		</tree>              		
+	                	</field>
+                	</group>
+                	<newline/>
+                	<group colspan="4" string="Guide:" > 
+                              <label string ="Operator support / +,-,*,/"/>
+                              <newline/>
+                              <separator col="4" colspan="4" string="DEFINE VARIABLE:"/>
+                              <label string ="amount: Amount of customer"/>
+                          </group>   
+                </form>
+	        </field>
+		</record>
+		
+		<record id="view_hpuas_loyalty_program_tree" model="ir.ui.view">
+	         <field name="name">hpusa.loyalty.program.tree</field>
+	         <field name="model">hpusa.loyalty.program</field>
+	         <field name="type">tree</field>
+	         <field name="arch" type="xml">
+	                <tree string="Loyalty Program">
+	                	<field name="name" />
+	                	<field name="sequence" />
+	                	<field name="start_date" />
+                		<field name="end_date" />
+                		<field name="actived"/>
+                		<field name="company_id" />
+                		<field name="currency" />
+                		<field name="state"/>
+	                </tree>
+	        </field>
+		</record>
+		
+
+		<record id="view_hpuas_loyalty_program_form" model="ir.ui.view">
+	         <field name="name">hpusa.loyalty.program.form</field>
+	         <field name="model">hpusa.loyalty.program</field>
+	         <field name="type">form</field>
+	         <field name="arch" type="xml">
+                <form string="Loyalty Program" version="7.0">
+	                <header>
+	                	<button name="action_submit" attrs="{'invisible': ['|',('actived', '!=',True),('state', '!=','draft')]}" string="Submit" type="object" class="oe_highlight"/>
+	                	<button name="action_cancel" states="done" string="Cancel" type="object"/>
+	                	<button name="action_set_to_draft" states="cancel" string="Set To Draft" type="object"/>
+	                	<field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+	                </header>
+                	<sheet>
+	                	<group col="4">
+	                		<group col="2" colspan="2">
+		                		<field name="name" colspan="2"/>
+		                		<field name="sequence" />
+		                		<field name="start_date" colspan="2"/>
+		                		<field name="end_date" colspan="2"/>
+	                		</group>
+	                		<group col="2" colspan="2">
+	                			<field name="actived" colspan="2"/>
+		                		<field name="company_id" colspan="2"/>
+		                		<field name="currency" colspan="2"/>
+	                		</group>
+	                	</group>
+	                	<group col="4">
+		                	<notebook>
+				            	<page string="Conditions">
+				            		<field name="condition_lines"/>
+				            	</page>
+				            	<page string="Customer">
+				            		<field name="partner_id"/>
+				            	</page>
+				            	<page string="Group Customer">
+				            		<field name="partner_group_id"/>
+				            	</page>
+			            	</notebook> 
+			            </group>
+			            <div class="oe_chatter">
+		                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+		                    <field name="message_ids" widget="mail_thread"/>
+                		</div>
+	            	</sheet>   
+                </form>
+	        </field>
+		</record>
+		
+	 <record id="view_hpuas_loyalty_program_filter" model="ir.ui.view">
+	            <field name="name">hpusa.loyalty.program.filter</field>
+	            <field name="model">hpusa.loyalty.program</field>
+	            <field name="arch" type="xml">
+	                <search string="Search Loyalty Program">
+	                    <field name="start_date"/>
+	                     <field name="name"/>
+	                      <field name="start_date"/>
+	                    <field name="end_date"/>
+	                    <field name="company_id" groups="base.group_multi_company"/>
+	                    <group expand="0" string="Group By...">
+	                   		<filter string="Company" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'company_id'}"/>
+	                        <filter string="Currency" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'currency'}"/>
+	                        <filter string="Ative" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'actived'}"/>
+	                        <filter string="State" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/>
+	                    </group>
+	                </search>
+	            </field>
+	        </record>			
+
+        <record id="action_hpuas_loyalty_program" model="ir.actions.act_window">
+            <field name="name">Loyalty Program</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hpusa.loyalty.program</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_hpuas_loyalty_program_tree"/>
+            <field name="search_view_id" ref="view_hpuas_loyalty_program_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new  Loyalty Program.
+              </p>
+            </field>
+        </record>
+        
+		<menuitem id="menu_action_hpuas_loyalty_program" name="Loyalty Program" parent="parrent_loyalty" action="action_hpuas_loyalty_program"  sequence="1"/>
+		
+		<record id="view_hpusa_register_loyalty_point_tree" model="ir.ui.view">
+	         <field name="name">hpusa.register.loyalty.point.tree</field>
+	         <field name="model">hpusa.register.loyalty.point</field>
+	         <field name="type">tree</field>
+	         <field name="arch" type="xml">
+	                <tree string="Register">
+	                	<field name="name" />
+	                	<field name="partner_id" />
+                		<field name="customer" />
+                		<field name="date" />
+                		<field name="amount" sum="Amount" />
+                		<field name="currency" />
+                		<field name="point" sum="Point"/>
+                		<field name="program" />
+                		<field name="obj" />
+                		<field name="type" />
+                		<field name="company_id" />
+                		<field name="state" />
+	                </tree>
+	        </field>
+		</record>
+		
+		<record id="view_hpusa_register_loyalty_point_form" model="ir.ui.view">
+	         <field name="name">hpusa.register.loyalty.point.form</field>
+	         <field name="model">hpusa.register.loyalty.point</field>
+	         <field name="type">form</field>
+	         <field name="arch" type="xml">
+                <form string="Register" version="7.0">
+                	<header>
+	                	<button name="action_submit" states="draft" string="Compute Point" type="object" class="oe_highlight"/>
+	                	<button name="action_cancel" states="done" string="Cancel" type="object"/>
+	                	<button name="action_set_to_draft" states="cancel" string="Set To Draft" type="object"/>
+	                	<field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+	                </header>
+                   <sheet>
+	                	<group col="4">
+	                		<group col="2" colspan="2">
+		                		<field name="name" colspan="2"/>
+		                		<field name="partner_id" colspan="2" context="{'search_default_customer':1, 'show_address': 1}"/>
+		                		<field name="date" colspan="2" on_change="onchange_date(date)"/>
+		                		<field name="currency" colspan="2"/>
+		                		<field name="obj" colspan="2"/>
+		                		<field name="type" colspan="2"/>
+		                		<field name="shop_id" colspan="2" attrs="{'required': [('obj', '=','shop')],'invisible': [('obj', '!=','shop')]}"/>
+	                			<field name="location_id" colspan="2" attrs="{'required': [('obj', '=','location')], 'invisible': [('obj', '!=','location')]}"/>
+	                			<field name="cate_prod_id" colspan="2" attrs="{'required': [('obj', '=','cate_prod')], 'invisible': [('obj', '!=','cate_prod')]}"/>
+	                		</group>
+	                		<group col="2" colspan="2">
+	                			<field name="customer" colspan="2"/>
+		                		<field name="amount" colspan="2"/>
+		                		<field name="point" colspan="2"/>
+	                			<field name="program" colspan="2"/>
+	                			<field name="company_id" colspan="2"/>
+	                			<field name="user_id" colspan="2" on_change="onchange_user_id(user_id)"/>
+	                			<field name="section_id" colspan="2"/>
+	                		</group>
+	                		<field name="note"/>
+                		</group>
+                	</sheet>
+                	<div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+                	</div>
+                </form>
+	        </field>
+		</record>
+	    <record id="view_hpusa_register_loyalty_point_graph" model="ir.ui.view">
+	         <field name="name">hpusa.register.loyalty.point.graph</field>
+	         <field name="model">hpusa.register.loyalty.point</field>
+	         <field name="arch" type="xml">
+	             <graph string="Register Loyalty" type="bar">
+	                 <field name="partner_id"/>
+	                 <field name="point"/>
+	                 <field name="state" group="True"/>
+	             </graph>
+	         </field>
+	    </record>		
+        <record id="view_hpusa_register_loyalty_point_filter" model="ir.ui.view">
+            <field name="name">hpusa.register.loyalty.filter</field>
+            <field name="model">hpusa.register.loyalty.point</field>
+            <field name="arch" type="xml">
+                <search string="Search Register Loyalty">
+                    <field name="date"/>
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="shop_id"/>
+                    <field name="location_id"/>
+                    <field name="cate_prod_id"/>
+                    <field name="program"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <group expand="0" string="Group By...">
+                   		<filter string="Company" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'company_id'}"/>
+                        <filter string="Partner" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="Currency" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'type'}"/>
+                        <filter string="Loyalty Program" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'program'}"/>
+                        <filter string="Object" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'obj'}"/>
+                        <filter string="Type" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'type'}"/>
+                        <filter string="State" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>	
+        	
+		<record id="action_hpusa_register_loyalty_point" model="ir.actions.act_window">
+			<field name="name">Register Loyalty</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hpusa.register.loyalty.point</field>
+			<field name="view_mode">tree,form,graph</field>
+			<field name="view_id" ref="view_hpusa_register_loyalty_point_tree"/>	
+			<field name="search_view_id" ref="view_hpusa_register_loyalty_point_filter"/>		
+		</record>		
+		
+		<menuitem action="action_hpusa_register_loyalty_point" id="menu_action_hpusa_register_loyalty_point" name="Register Loyalty" parent="parrent_loyalty" sequence="2"/>
+
+		<record id="view_hpusa_voucher_tree" model="ir.ui.view">
+	         <field name="name">hpusa.voucher.tree</field>
+	         <field name="model">hpusa.voucher</field>
+	         <field name="type">tree</field>
+	         <field name="arch" type="xml">
+	                <tree string="Voucher">
+	                	<field name="level" />
+	                	<field name="name" />
+                		<field name="point"/>
+                		<field name="date" />
+                		<field name="actived" />
+                		<field name="discount" invisible="1"/>
+                		<field name="company_id" />
+                		<field name="state"/>
+	                </tree>
+	        </field>
+		</record>
+
+	        	
+		<record id="view_hpusa_voucher_form" model="ir.ui.view">
+	         <field name="name">hpusa.voucher.form</field>
+	         <field name="model">hpusa.voucher</field>
+	         <field name="type">form</field>
+	         <field name="arch" type="xml">
+                <form string="Voucher" version="7.0">
+                	<header>
+	                	<button name="action_submit" attrs="{'invisible': ['|',('actived', '!=',True),('state', '!=','draft')]}" string="Submit" type="object" class="oe_highlight"/>
+	                	<button name="action_cancel" states="done" string="Cancel" type="object"/>
+	                	<button name="action_set_to_draft" states="cancel" string="Set To Draft" type="object"/>
+	                	<field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+	                </header>
+                	<sheet>
+	                	<group col="4">
+	                		<group col="2" colspan="2">
+		                		<field name="level" colspan="2"/>
+		                		<field name="name" colspan="2"/>
+		                		<field name="point" colspan="2"/>
+		                		<field name="date" colspan="2"/>
+	                		</group>
+	                		<group col="2" colspan="2">
+	                			<field name="actived" colspan="2"/>
+		                		<field name="discount" colspan="2" invisible="1"/>
+		                		<field name="company_id" colspan="2"/>
+	                		</group>
+	                	</group>
+	                </sheet>
+	                <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+                	</div>
+                </form>
+	        </field>
+		</record>
+
+	 <record id="view_hpusa_voucher_filter" model="ir.ui.view">
+	            <field name="name">hpusa.voucher.filter</field>
+	            <field name="model">hpusa.voucher</field>
+	            <field name="arch" type="xml">
+	                <search string="Search Voucher">
+	                    <field name="name"/>
+	                    <field name="date"/>
+	                    <field name="company_id" groups="base.group_multi_company"/>
+	                    <group expand="0" string="Group By...">
+	                   		<filter string="Company" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'company_id'}"/>
+	                   		<filter string="Ative" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'actived'}"/>
+	                        <filter string="State" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/>
+	                    </group>
+	                </search>
+	            </field>
+	        </record>			
+		<record id="action_hpusa_voucher" model="ir.actions.act_window">
+			<field name="name">Voucher</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hpusa.voucher</field>
+			<field name="view_id" ref="view_hpusa_voucher_tree"/>
+			<field name="search_view_id" ref="view_hpusa_voucher_filter"/>				
+		</record>		
+		
+		<menuitem action="action_hpusa_voucher" id="menu_action_hpusa_voucher" name="Voucher" parent="parrent_loyalty" sequence="4"/>
+		
+		<record id="view_hpusa_gift_voucher_tree" model="ir.ui.view">
+	         <field name="name">hpusa.gift.voucher.tree</field>
+	         <field name="model">hpusa.gift.voucher</field>
+	         <field name="type">tree</field>
+	         <field name="arch" type="xml">
+	                <tree string="Gift Voucher">
+	                	<field name="name" />
+	                	<field name="voucher_id" />
+	                	<field name="quantity" />
+                		<field name="partner_id"/>
+                		<field name="point_current" sum="Point Current"/>
+                		<field name="point" sum="Point"/>
+                		<field name="date" />
+                		<field name="shop_id"/>
+                		<field name="customer_no" />
+                		<field name="company_id" />
+                            <field name="program"/>
+                		<field name="state"/>
+	                </tree>
+	        </field>
+		</record>
+		
+		<record id="view_hpusa_gift_voucher_form" model="ir.ui.view">
+	         <field name="name">hpusa.gift.voucher.form</field>
+	         <field name="model">hpusa.gift.voucher</field>
+	         <field name="type">form</field>
+	         <field name="arch" type="xml">
+                <form string="Gift Voucher" version="7.0">
+	                <header>
+	                	<button name="action_confirm" states="draft" string="Compute" type="object" class="oe_highlight"/>
+	                	<button name="action_done" states="confirm" string="Done" type="object" class="oe_highlight"/>
+	                	<button name="action_cancel" states="done" string="Cancel" type="object"/>
+	                	<button name="action_set_to_draft" states="cancel" string="Set To Draft" type="object"/>
+	                	<field name="state" widget="statusbar" statusbar_visible="draft, confrim ,done"/>
+	                </header>
+                	<sheet>
+	                	<group col="4">
+	                		<group col="2" colspan="2">
+		                		<field name="name" colspan="2"/>
+		                		<field name="voucher_id" colspan="2"/>
+		                		<field name="quantity" colspan="2"/>
+		                		<field name="point" colspan="2"/>
+		                		<field name="partner_id" colspan="2" context="{'search_default_customer':1, 'show_address': 1}"/>
+		                		<field name="point_current" colspan="2"/>
+		                		<field name="company_id" colspan="2"/>
+	                		</group>
+	                		<group col="2" colspan="2">
+	                			<field name="date" colspan="2" on_change="onchange_date(date)"/>
+		                		<field name="shop_id" colspan="2"/>
+		                		<field name="customer_no" colspan="2"/>
+		                		<field name="user_id" colspan="2" on_change="onchange_user_id(user_id)"/>
+	                			<field name="section_id" colspan="2"/>
+	                			<field name="program" colspan="2"/>
+	                		</group>
+	                	</group>
+	                </sheet>
+	              	<div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+                	</div>
+                </form>
+	        </field>
+		</record>
+	    <record id="view_hpusa_gift_voucher_graph" model="ir.ui.view">
+	         <field name="name">hpusa.gift.voucher.graph</field>
+	         <field name="model">hpusa.gift.voucher</field>
+	         <field name="arch" type="xml">
+	             <graph string="Gift Voucher" type="bar">
+	                 <field name="partner_id"/>
+	                 <field name="point"/>
+	                 <field name="state" group="True"/>
+	             </graph>
+	         </field>
+	    </record>
+	 <record id="view_hpusa_gift_voucher_filter" model="ir.ui.view">
+	            <field name="name">hpusa.gift.voucher.filter</field>
+	            <field name="model">hpusa.gift.voucher</field>
+	            <field name="arch" type="xml">
+	                <search string="Search Gift Voucher">
+	                    <field name="date"/>
+	                    <field name="partner_id"/>
+	                    <field name="name"/>
+	                    <field name="voucher_id"/>
+	                    <field name="customer_no"/>
+                           <field name="program"/>
+	                    <field name="company_id" groups="base.group_multi_company"/>
+	                    <group expand="0" string="Group By...">
+	                   		<filter string="Company" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'company_id'}"/>
+	                   		<filter string="Partner" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'partner_id'}"/>
+	                   		<filter string="Voucher" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'voucher_id'}"/>
+                                   <filter string="Program" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'program'}"/>
+	                   		<filter string="Shop" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'shop_id'}"/>
+	                        <filter string="State" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/>
+	                    </group>
+	                </search>
+	            </field>
+	        </record>	
+	    	
+		<record id="action_hpusa_gift_voucher" model="ir.actions.act_window">
+			<field name="name">Gift Voucher</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hpusa.gift.voucher</field>
+			<field name="view_mode">tree,form,graph</field>
+			<field name="view_id" ref="view_hpusa_gift_voucher_tree"/>
+			<field name="search_view_id" ref="view_hpusa_gift_voucher_filter"/>		
+		</record>		
+		
+		<menuitem action="action_hpusa_gift_voucher" id="menu_action_hpusa_gift_voucher" name="Gift Voucher" parent="parrent_loyalty" sequence="5"/>
+		
+		<record id="view_hpusa_loyalty_move_tree" model="ir.ui.view">
+	         <field name="name">hpusa.loyalty.move.tree</field>
+	         <field name="model">hpusa.loyalty.move</field>
+	         <field name="type">tree</field>
+	         <field name="arch" type="xml">
+	                <tree string="Gift Voucher">
+                            <field name="program"/>
+	                	<field name="voucher_id"/>
+                		<field name="partner_id"/>
+                		<field name="date" />
+                		<field name="quantity"/>
+	                	<field name="name" />	                	
+                		<field name="point" sum="Point"/>
+                		<field name="amount" sum="amount"/>
+                		<field name="type" />
+                		<field name="company_id" />
+                		<field name="state"/>
+	                </tree>
+	        </field>
+		</record>
+		
+		<record id="view_hpusa_loyalty_move_form" model="ir.ui.view">
+	         <field name="name">hpusa.loyalty.move.form</field>
+	         <field name="model">hpusa.loyalty.move</field>
+	         <field name="type">form</field>
+	         <field name="arch" type="xml">
+                <form string="Gift Voucher" version="7.0">
+	                <header>
+	                	<button name="action_confirm" states="draft" string="Comfirm" type="object" class="oe_highlight"/>
+	                	<button name="action_done" states="confirm" string="Done" type="object" class="oe_highlight"/>
+	                	<button name="action_cancel" states="done" string="Cancel" type="object"/>
+	                	<button name="action_set_to_draft" states="cancel" string="Set To Draft" type="object"/>
+	                	<field name="state" widget="statusbar" statusbar_visible="draft, confrim,done"/>
+	                </header>
+                	<sheet>
+	                	<group col="4">
+	                		<group col="2" colspan="2">
+		                		<field name="name" colspan="2"/>
+		                		<field name="partner_id" colspan="2" context="{'search_default_customer':1, 'show_address': 1}"/>
+		                		<field name="voucher_id"/>
+                				<field name="quantity"/>
+		                		<field name="point" colspan="2"/>
+		                		<field name="amount" colspan="2"/>
+	                		</group>
+	                		<group col="2" colspan="2">
+	                			<field name="date" colspan="2"/>
+		                		<field name="type" colspan="2"/>
+		                		<field name="company_id" colspan="2"/>
+		                		<field name="user_id" colspan="2" on_change="onchange_user_id(user_id)" invisible="1"/>
+	                			<field name="section_id" colspan="2" invisible="1"/>
+	                		</group>
+	                	</group>
+	                </sheet>
+	                <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+                	</div>
+                </form>
+	        </field>
+		</record>
+
+	 <record id="view_hpusa_loyalty_move_filter" model="ir.ui.view">
+	            <field name="name">hpusa.loyalty.move.filter</field>
+	            <field name="model">hpusa.loyalty.move</field>
+	            <field name="arch" type="xml">
+	                <search string="Search Gift Voucher">
+	                 	<filter string="  Valid  "
+                        domain="[('type','in', ('cumulative','used'))]"/>
+	                    <field name="date"/>
+	                    <filter string="  Invalid  "
+                        domain="[('type','=', ('expired'))]"/>
+                      <filter string="Reward Card Issue"
+                        domain="[('type','=', ('used'))]"/>
+                      <filter string="Reward Point"
+                        domain="[('type','=', ('cumulative'))]"/>
+	                    <field name="date"/>
+	                    <field name="name"/>
+	                    <field name="partner_id"/>
+                           <field name="voucher_id"/>
+                           <field name="program"/>
+	                    <field name="type"/>
+	                    <field name="company_id" groups="base.group_multi_company"/>
+	                    <group expand="0" string="Group By...">
+	                   		<filter string="Company" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'company_id'}"/>
+	                   		<filter string="Partner" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'partner_id'}"/>
+	                   		<filter string="Type" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'type'}"/>
+                                   <filter string="Voucher" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'voucher_id'}"/>
+	                   		<filter string="Program" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'program'}"/>
+	                   		<filter string="Type" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'type'}"/>
+
+	                        <filter string="State" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/>
+	                    </group>
+	                </search>
+	            </field>
+	        </record>	
+	    <record id="view_hpusa_loyalty_move_graph_2" model="ir.ui.view">
+	         <field name="name">hpusa.loyalty.move.graph</field>
+	         <field name="model">hpusa.loyalty.move</field>
+	         <field name="arch" type="xml">
+	             <graph string="Register Loyalty" type="bar">
+	                 <field name="partner_id"/>
+	                 <field name="quantity" operator="+"/>
+	             </graph>
+	         </field>
+	    </record>	
+	    
+	    <record id="view_hpusa_loyalty_move_graph_1" model="ir.ui.view">
+	         <field name="name">hpusa.loyalty.move.graph</field>
+	         <field name="model">hpusa.loyalty.move</field>
+	         <field name="arch" type="xml">
+	             <graph string="Register Loyalty" type="bar">
+	                 <field name="partner_id"/>
+	                 <field name="point" operator="+"/>
+	             </graph>
+	         </field>
+	    </record>	
+	    	        			
+		
+		
+		
+		
+		<record id="action_hpusa_loyalty_move" model="ir.actions.act_window">
+			<field name="name">Loyalty Program Record Point</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hpusa.loyalty.move</field>
+			<field name="view_id" ref="view_hpusa_loyalty_move_tree"/>
+			<field name="search_view_id" ref="view_hpusa_loyalty_move_filter"/>	
+			<field name="view_mode">tree,form,graph</field>
+		</record>	
+		
+		<record id="action_hpusa_loyalty_move_2" model="ir.actions.act_window">
+			<field name="name">Loyalty Program Record Quantity</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hpusa.loyalty.move</field>
+			<field name="view_id" ref="view_hpusa_loyalty_move_tree"/>
+			<field name="search_view_id" ref="view_hpusa_loyalty_move_filter"/>	
+			<field name="view_mode">tree,form,graph</field>
+		</record>	
+		
+		<record model="ir.actions.act_window.view" id="action_hpusa_loyalty_move_tree">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_hpusa_loyalty_move_tree"/>
+            <field name="act_window_id" ref="action_hpusa_loyalty_move"/>
+        </record>
+        
+		<record model="ir.actions.act_window.view" id="action_hpusa_loyalty_move_graph1">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">graph</field>
+            <field name="view_id" ref="view_hpusa_loyalty_move_graph_1"/>
+            <field name="act_window_id" ref="action_hpusa_loyalty_move"/>
+        </record>
+        	
+		
+        <record model="ir.actions.act_window.view" id="action_hpusa_loyalty_move_form">
+            <field name="sequence" eval="4"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_hpusa_loyalty_move_form"/>
+            <field name="act_window_id" ref="action_hpusa_loyalty_move"/>
+        </record>
+        
+        <record model="ir.actions.act_window.view" id="action_hpusa_loyalty_move_tree_2">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_hpusa_loyalty_move_tree"/>
+            <field name="act_window_id" ref="action_hpusa_loyalty_move_2"/>
+        </record>
+        
+		<record model="ir.actions.act_window.view" id="action_hpusa_loyalty_move_graph1_2">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">graph</field>
+            <field name="view_id" ref="view_hpusa_loyalty_move_graph_2"/>
+            <field name="act_window_id" ref="action_hpusa_loyalty_move_2"/>
+        </record>
+        	
+		
+        <record model="ir.actions.act_window.view" id="action_hpusa_loyalty_move_form_2">
+            <field name="sequence" eval="4"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_hpusa_loyalty_move_form"/>
+            <field name="act_window_id" ref="action_hpusa_loyalty_move_2"/>
+        </record>
+        
+		<menuitem action="action_hpusa_loyalty_move" id="menu_action_hpusa_loyalty_move" name="Program Record Point" parent="parrent_loyalty" sequence="6"/>
+		
+		<menuitem action="action_hpusa_loyalty_move_2" id="menu_action_hpusa_loyalty_move_1" name="Program Record Quantity" parent="parrent_loyalty" sequence="6"/>
+		
+
+        <record id="hpusa_res_partner_view_buttons_1" model="ir.ui.view">
+            <field name="name">res.partner.view.buttons</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+	            <xpath expr="//div[@name='buttons']" position="inside">
+	            <group col="4">
+	            				<button name="acction_create_register" string="Create Register Loyalty" colspan="4" type="object"/>
+	            				<button name="acction_create_gift" string="Create Gift Voucher" colspan="4" type="object"/>
+	            			</group>
+	            </xpath>
+            	<page string="Sales &amp; Purchases" position="after">
+            		<page string="Loyalty">
+            			
+	            		<group col="4">
+	            			<field name="start_date" colspan="2"/>
+	            			<field name="end_date" colspan="2"/>
+	            			<field name="point_cumulative" colspan="2"/>
+	            			<field name="point_use" colspan="2"/>
+	            			<field name="point_expired" colspan="2"/>
+	            			<field name="point_remain" colspan="2"/>
+	            		</group>
+            		</page>
+            	</page>
+            </field>
+        </record>
+	</data>
+</openerp>

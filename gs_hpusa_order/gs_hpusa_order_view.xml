@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>	   
+
+       <record model="ir.ui.view" id="gs_order_config_loaivang_form">
+            <field name="name">gs.order.config.loaivang.form</field>
+            <field name="model">gs.order.config.loaivang</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <form string="Loai vang" version="7.0">
+                     <group>
+                     	<field name="name"/> 
+				<field name="description" placeholder="Description"/> 		
+ 			</group>
+                </form>
+            </field>
+        </record>
+
+       
+       <record id="gs_order_config_loaivang_tree" model="ir.ui.view">
+            <field name="name">gs.order.config.loaivang.tree</field>
+            <field name="model">gs.order.config.loaivang</field>
+            <field name="arch" type="xml">
+                <tree string="Loai vang">
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+       <record id="gs_order_config_loaivang_act" model="ir.actions.act_window">
+            <field name="name">Loai vang</field>
+            <field name="res_model">gs.order.config.loaivang</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="gs_order_config_loaivang_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new Loai vang.
+              </p>
+            </field>
+        </record>
+		<record model="ir.ui.view" id="gs_order_config_hotgiua_form">
+            <field name="name">gs.order.config.hotgiua.form</field>
+            <field name="model">gs.order.config.hotgiua</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <form string="Hot giua" version="7.0">
+                     <group>
+                     	<field name="name"/> 
+				<field name="description" placeholder="Description"/> 		
+ 			</group>
+                </form>
+            </field>
+        </record>
+
+       
+       <record id="gs_order_config_hotgiua_tree" model="ir.ui.view">
+            <field name="name">gs.order.config.hotgiua.tree</field>
+            <field name="model">gs.order.config.hotgiua</field>
+            <field name="arch" type="xml">
+                <tree string="Hot giua">
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+       <record id="gs_order_config_hotgiua_act" model="ir.actions.act_window">
+            <field name="name">Hot giua</field>
+            <field name="res_model">gs.order.config.hotgiua</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="gs_order_config_hotgiua_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new Hot giua.
+              </p>
+            </field>
+        </record>
+		<record model="ir.ui.view" id="gs_order_config_size_form">
+            <field name="name">gs.order.config.size.form</field>
+            <field name="model">gs.order.config.size</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <form string="Size" version="7.0">
+                     <group>
+	                     <field name="name"/> 
+				<field name="description" placeholder="Description"/> 		
+              	       <field name="product_id"/>
+			</group>
+                </form>
+            </field>
+        </record>
+
+       
+       <record id="gs_order_config_size_tree" model="ir.ui.view">
+            <field name="name">gs.order.config.size.tree</field>
+            <field name="model">gs.order.config.size</field>
+            <field name="arch" type="xml">
+                <tree string="Size">
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="product_id"/>
+                </tree>
+            </field>
+        </record>
+
+       <record id="gs_order_config_size_act" model="ir.actions.act_window">
+            <field name="name">Size</field>
+            <field name="res_model">gs.order.config.size</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="gs_order_config_size_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new Size.
+              </p>
+            </field>
+        </record>
+		<record model="ir.ui.view" id="gs_order_config_hottam_form">
+            <field name="name">gs.order.config.hottam.form</field>
+            <field name="model">gs.order.config.hottam</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <form string="Hot tam" version="7.0">
+ 			<group>
+	                     <field name="name"/> 
+				<field name="description" placeholder="Description"/> 		
+ 			</group>
+                </form>
+            </field>
+        </record>
+
+       
+       <record id="gs_order_config_hottam_tree" model="ir.ui.view">
+            <field name="name">gs.order.config.hottam.tree</field>
+            <field name="model">gs.order.config.hottam</field>
+            <field name="arch" type="xml">
+                <tree string="Hot tam">
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+       <record id="gs_order_config_hottam_act" model="ir.actions.act_window">
+            <field name="name">Hot tam</field>
+            <field name="res_model">gs.order.config.hottam</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="gs_order_config_hottam_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new Hot tam.
+              </p>
+            </field>
+        </record>
+	<menuitem name="Require To Order" id="gs_hpusa_order" sequence="30"/>
+       <menuitem name="Yeu cau" id="gs_hpusa_order_require" parent="gs_hpusa_order" sequence="1"/>
+	<menuitem id="menu_sale_quotations" action="sale.action_quotations" parent="gs_hpusa_order_require" sequence="1"/>
+       <menuitem action="sale.action_orders" id="menu_sale_order" parent="gs_hpusa_order_require" sequence="2"/>
+	<menuitem name="Cau hinh" id="gs_hpusa_order_config" parent="gs_hpusa_order" sequence="2"/>
+	<menuitem action="gs_order_config_loaivang_act" id="menu_gs_order_config_loaivang" parent="gs_hpusa_order_config" sequence="1"/>
+	<menuitem action="gs_order_config_hotgiua_act" id="menu_gs_order_config_hotgiua" parent="gs_hpusa_order_config" sequence="2"/>
+	<menuitem action="gs_order_config_size_act" id="menu_gs_order_config_size" parent="gs_hpusa_order_config" sequence="3"/>
+	<menuitem action="gs_order_config_hottam_act" id="menu_gs_order_config_hottam" parent="gs_hpusa_order_config" sequence="4"/>
+       <menuitem action="product.product_normal_action_sell" id="product.menu_products" parent="gs_hpusa_order_config" sequence="5"/>
+
+       <record id="gs_view_order_form" model="ir.ui.view">
+            <field name="name">gs.sale.order.form</field>
+            <field name="model">sale.order</field>
+	     <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                     <xpath expr="/form/header/button[@name='action_quotation_send']" position="after">                     
+                    		<button type="object" name="action_order_in_process" states="draft" string="Order In Process"/>               
+			</xpath>
+                     <xpath expr="/form/header/button[@name='action_button_confirm']" position="replace">                     
+                    		<button name="action_button_confirm" states="order_in_process" string="Confirm Sale" type="object" groups="base.group_user"/>               
+			</xpath>                     
+                     <xpath expr="/form/header/button[@name='cancel']" position="replace">                     
+                    		<button name="cancel" states="draft,sent,order_in_process" string="Cancel" groups="base.group_user"/>
+			</xpath>
+                     <xpath expr="/form/header/button[@name='print_quotation']" position="replace">                     
+                    		<button name="print_quotation" string="Print" type="object" states="draft" class="oe_highlight" groups="base.group_user" invisible="1"/>
+			</xpath>                    
+
+                     <xpath expr="/form/header/field[@name='state']" position="replace">                     
+                    		<field name="state" widget="statusbar" statusbar_visible="draft,order_in_process,done" statusbar_colors='{"invoice_except":"red","waiting_date":"blue"}'/>           
+			</xpath>
+                     <xpath expr="/form/sheet/group/group/field[@name='partner_id']" position="after">                     
+                    		<field name = "phive3D" />
+				<field name = "philamsap" />
+				<field name = "phiduc" />
+				<field name = "philamnguoi" />                 
+			</xpath> 
+			<xpath expr="/form/sheet/group/group/field[@name='client_order_ref']" position="after">                     
+                    		<field name = "phinhanhot" />
+				<field name = "phidanhbongxima" />
+				<field name = "trongluongsanpham" />               
+			</xpath>				
+			<xpath expr="/form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='name']" position="after">                     
+                    		<field name = "loaivang_id" />
+				<field name = "hotgiua_id" />
+				<field name = "size_id" domain="[('product_id','=',product_id)]"/>
+				<field name = "hottam_id" />                 
+			</xpath>  
+                     <xpath expr="/form/sheet/notebook/page/field[@name='order_line']/form/group/group/field[@name='product_id']" position="after">                     
+                    		<field name = "loaivang_id" />
+				<field name = "hotgiua_id" />
+				<field name = "size_id" domain="[('product_id','=',product_id)]"/>
+				<field name = "hottam_id" />                 
+			</xpath>
+                     <xpath expr="/form/sheet/group/group/field[@name='project_id']" position="replace">                     
+                            <field name = "project_id" invisible="1" />        
+			</xpath>
+			
+			
+	     </field>
+        </record>
+  
+
+</data>
+</openerp>

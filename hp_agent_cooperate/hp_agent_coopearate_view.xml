@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>		
+		<record model="ir.ui.view" id="hpusa_users_agent_cooperate">
+            <field name="name">Users Agent Cooperate</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form" />
+            <field name="arch" type="xml">
+                   <h2 position="after">
+                    		<label for="code" class="oe_edit_only"/>
+                            <h2><field name="code"/></h2>
+                   </h2>
+                   <label for="name" class="oe_edit_only" position="before">
+                   		<label for="option_choose"  class="oe_edit_only"/>
+                   		<field name="option_choose" style="width:100px;" on_change="onchang_option_choose(option_choose)"/>
+                   		<group  style="width:300px;" ></group>
+                   </label>
+            </field>
+        </record>
+        <!-- B2 -->
+        
+       <record model="ir.ui.view" id="hpusa_invoice_form">
+            <field name="name">hpsua.account.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form" />
+            <field name="arch" type="xml">
+					<button name="invoice_open" states="draft" string="Validate" class="oe_highlight" groups="base.group_user" position="replace">
+                   		 <button name="invoice_open" string="Validate" class="oe_highlight" attrs="{'invisible':['|',('is_agent_cooperate','=',True), ('state', '!=', 'draft')]}"/>
+                   		 <field name="is_agent_cooperate" invisible="1"/>
+                   </button>                   
+            </field>
+        </record>
+        
+       
+        <record id="sale_commission_calc.view_product_rate" model="ir.ui.view">
+            <field name="model">product.product</field>
+            <field name="arch" type="xml">
+                <tree string="Product Rates" editable="top">
+                    <field name="name" readonly="1"/>
+                    <field name="type" readonly="1"/>
+                    <field name="typeproduct" on_change="onchang_option_choose(typeproduct)"/>            
+                    <field name="uom_id" readonly="1"/>        		
+                    <field name="limit_price"/>                  		
+                    <field name="percent_commission"/>
+                    <field name="maximum_discount"/> 
+                    <field name="buffer_days"/>                          
+                    <field name="active" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+        
+         <!-- Sales Person -->
+        <record id="sale_commission_calc.view_salesperson_commission_rule" model="ir.ui.view">
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <tree string="Salesperson Commission Rule" editable="top">
+                    <field name="name" readonly="1"/>
+                    <field name="commission_rule_id"/>
+                    <field name="option_choose"/>                   
+                    <field name="last_pay_date_rule" attrs="{'required': [('commission_rule_id','!=',False)]}"/>
+                    <field name="require_paid"/>
+                    <field name="require_posted"/>
+                    <field name="allow_overdue"/>
+                    <field name="buffer_days"/>
+                    <field name="active" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+	</data>
+</openerp>

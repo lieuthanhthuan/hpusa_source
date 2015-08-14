@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    	<menuitem id="hpusa_report" name="Report" parent="base.menu_mrp_root"  sequence="10"/>
+        <record id="wizard_hpusa_product_list_report" model="ir.ui.view">
+            <field name="name">wizard.hpusa.product.list.report.form</field>
+            <field name="model">wizard.hpusa.product.list.report</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Report" version="7.0">
+	                <group col="6">
+	                	<field name="date_from" colspan="2"/>
+	                	<field name="date_to" colspan="2"/>
+	                	<newline/>
+	                	<field name="location_id" colspan="4"/>
+	                	<newline/>
+	                	<field name="category_id" colspan="4"/>
+	                </group>    
+                <footer>
+                      <button name="action_print" string="Print" type="object" class="oe_highlight"/>
+                      or
+                      <button string="Cancel" class="oe_link" special="cancel" />
+                  </footer>
+                </form>
+            </field>
+        </record>
+        <record id="action_wizard_hpusa_product_list_report" model="ir.actions.act_window">
+            <field name="name">Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.hpusa.product.list.report</field>
+            <field name="context">{'type_': 'product_list'}</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem id="menu_action_wizard_hpusa_product_list_report" name="Stock Picking Detail" parent="hpusa_report" action="action_wizard_hpusa_product_list_report"  sequence="1"/>
+        
+        
+        <record id="action_wizard_hpusa_stock_in_out_report" model="ir.actions.act_window">
+            <field name="name">Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.hpusa.product.list.report</field>
+            <field name="context">{'type_': 'stock_in_out'}</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem id="menu_action_wizard_hpusa_report" name="Stock In Out" parent="hpusa_report" action="action_wizard_hpusa_stock_in_out_report"  sequence="2"/>
+
+	<!-- hpusa 08-07-2015 -->
+    	<record id="action_wizard_hpusa_stock_in_out_report_diamond" model="ir.actions.act_window">
+            <field name="name">Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">wizard.hpusa.product.list.report</field>
+            <field name="context">{'type_': 'stock_in_out_diamond'}</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem id="menu_action_wizard_hpusa_report_diamond" name="Stock In Out Diamond" parent="hpusa_report" action="action_wizard_hpusa_stock_in_out_report_diamond"  sequence="3"/>
+    	<!-- hpusa 08-07-2015 -->
+
+
+    </data>
+</openerp>
